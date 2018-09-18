@@ -4,6 +4,7 @@
 #include <random>
 #include <chrono>
 #include <functional>
+#include <fstream>
 
 using namespace std;
 using namespace std::chrono;
@@ -17,7 +18,7 @@ void hello_world()
 	cout << "Hello from thread " << this_thread::get_id() << endl;
 }
 
-void task_one()
+void task_one()	// Example 2
 {
 	cout << "Task one starting" << endl;
 	cout << "Task one sleeping for 3 seconds" << endl;
@@ -29,7 +30,7 @@ void task_one()
 	cout << "Task one ending" << endl;
 }
 
-void task_two()
+void task_two()	// Example 2
 {
 	cout << "Task two starting" << endl;
 	cout << "Task two sleeping for 2 seconds" << endl;
@@ -45,6 +46,15 @@ void task(size_t n, int val)
 {
 	cout << "Thread: " << n << " Random Value: " << val << endl;
 }
+
+void work()
+{
+	int n = 0;
+	for (int i = 0; i < 1000000; ++i) {
+		++n;								// Do some spinning - no actual processing but will make the CPU work
+	}
+}
+
 
 int main(int argc, char **argv)
 {
@@ -85,7 +95,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 4 - Lambda Expressions */
+	/* Example 4 - Lambda Expressions /
 	auto add = [](int x, int y) { return x + y; };		// Create lambda expression
 	auto x = add(10, 12);								// Call the defined function
 	cout << "10 + 12 = " << x << endl;					// Display answer - should be 22
@@ -117,6 +127,28 @@ int main(int argc, char **argv)
 	x = add_reference();								// Call the reference based function again
 	cout << "30 + 5 = " << x << endl;					// Display the answer - should be 35
 
+	return 0;
+	// ************************* //
+
+	/* Example 5 - Thread Creation using Lambda Expressions /
+	thread t([] { cout << "Hello from lambda thread!" << endl; });		// Create a thread using a lambda expression
+	t.join();			// Join thread
+	
+	return 0;
+	// ************************* //
+
+	/* Example 6 - CSV Serialisation */
+	ofstream data("data.csv", ofstream::out);		// Create a new file
+	for (int i = 0; i < 100; ++i) {					// We’re going to gather 100 readings, so create a thread and join it 100 times
+		auto start = system_clock::now();			// Get start time
+		thread t(work);								// Start thread
+		t.join();									
+		auto end = system_clock::now();				// Get end time
+		auto total = end - start;					// Calculate the duration
+		data << total.count() << endl;				// Write to file
+	}
+	
+	data.close();									// 100 iterations complete.
 	return 0;
 	// ************************* //
 }
