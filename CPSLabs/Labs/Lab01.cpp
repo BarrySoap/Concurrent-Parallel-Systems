@@ -55,6 +55,27 @@ void work()
 	}
 }
 
+void monte_carlo_pi(size_t iterations)
+{
+	std::random_device r;										// Seed with real random number if available
+	default_random_engine e(r());								// Create random number generator
+	uniform_real_distribution<double> distribution(0.0, 1.0);	// Create a distribution - we want doubles between 0.0 and 1.0
+
+	unsigned int in_circle = 0;									// Keep track of number of points in circle
+		
+	for (size_t i = 0; i < iterations; ++i) {					// Iterate	
+		auto x = distribution(e);								// Generate random point(s)
+		auto y = distribution(e);
+		
+		auto length = sqrt((x * x) + (y * y));					// Get length of vector defined - use Pythagoras
+		
+		if (length <= 1.0) {									// Check if in circle
+			++in_circle;
+		}
+	}
+	auto pi = (4.0 * in_circle) / static_cast<double>(iterations);		// Calculate pi (not returned)
+}
+
 
 int main(int argc, char **argv)
 {
@@ -137,7 +158,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 6 - CSV Serialisation */
+	/* Example 6 - CSV Serialisation /
 	ofstream data("data.csv", ofstream::out);		// Create a new file
 	for (int i = 0; i < 100; ++i) {					// We’re going to gather 100 readings, so create a thread and join it 100 times
 		auto start = system_clock::now();			// Get start time
@@ -149,6 +170,33 @@ int main(int argc, char **argv)
 	}
 	
 	data.close();									// 100 iterations complete.
+	return 0;
+	// ************************* //
+
+	/* Example 7 - Monte Carlo Pi Distributions */
+	ofstream data("montecarlo.csv", ofstream::out);					// Create data file
+
+	for (size_t num_threads = 0; num_threads <= 6; ++num_threads) {
+		auto total_threads = static_cast<unsigned int>(pow(2.0, num_threads));	// Calculate number of threads
+		cout << "Number of threads = " << total_threads << endl;	// Output number of threads
+		data << "num_threads_" << total_threads;					// Serialise number of threads to the file
+		
+		for (size_t iters = 0; iters < 100; ++iters) {				// Now execute 100 iterations
+			auto start = system_clock::now();						// Get the start time
+			vector<thread> threads;									// We need to create total_threads threads
+			for (size_t n = 0; n < total_threads; ++n) {
+				threads.push_back(thread(monte_carlo_pi, static_cast<unsigned int>(pow(2.0, 24.0 - num_threads))));		// Working in base 2 to make things a bit easier
+			}
+			for (auto &t : threads) {
+				t.join();											// Join the threads (wait for them to finish)
+			}
+			auto end = system_clock::now();							// Get the end time
+			auto total = end - start;								// Get the total time
+			data << ", " << duration_cast<milliseconds>(total).count();		// Convert to milliseconds and output to file
+		}
+		data << endl;
+	}
+	data.close();				// Close the file
 	return 0;
 	// ************************* //
 }
