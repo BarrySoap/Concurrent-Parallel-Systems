@@ -3,6 +3,7 @@
 #include <vector>
 #include <random>
 #include <chrono>
+#include <functional>
 
 using namespace std;
 using namespace std::chrono;
@@ -10,7 +11,7 @@ using namespace std::this_thread;
 
 constexpr size_t num_threads = 100;		// constexpr = The constexpr specifier declares that it is possible to evaluate the value of the function or variable at compile time
 
-/* This is the function called by the thread */
+/* This is the function called by the thread in example 1 */
 void hello_world()
 {
 	cout << "Hello from thread " << this_thread::get_id() << endl;
@@ -68,7 +69,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 3 - Giving Threads Parameters*/
+	/* Example 3 - Giving Threads Parameters /
 	std::random_device r;				// Create a random, seed with real random number if available
 	default_random_engine e(r());		// Create random number generator
 
@@ -81,6 +82,41 @@ int main(int argc, char **argv)
 		t.join();
 	}
 		
+	return 0;
+	// ************************* //
+
+	/* Example 4 - Lambda Expressions */
+	auto add = [](int x, int y) { return x + y; };		// Create lambda expression
+	auto x = add(10, 12);								// Call the defined function
+	cout << "10 + 12 = " << x << endl;					// Display answer - should be 22
+
+	function<int(int, int)> add_function = [](int x, int y) { return x + y; };		// Create function object with same lambda expression
+	x = add_function(20, 12);							// Call the function object
+	cout << "20 + 12 = " << x << endl;					// Display the answer - should be 32
+
+	int a = 5;
+	int b = 10;
+	
+	auto add_fixed = [a, b] { return a + b; };			// Define the values passed to the function
+	x = add_fixed();									// Call the function
+	cout << "5 + 10 = " << x << endl;					// Display the answer - should be 15
+
+	a = 20;												// Change values of a and b
+	b = 30;
+	
+	x = add_fixed();									// Call the fixed function again
+	cout << "20 + 30 = " << x << endl;					// Display the answer - will come out as 15
+
+	auto add_reference = [&a, &b] { return a + b; };	// Define the values passed to the function , but pass as reference
+	x = add_reference();								// Call the function
+	cout << "20 + 30 = " << x << endl;					// Display the answer - should be 50
+
+	a = 30;												// Change the values of a and b
+	b = 5;
+	
+	x = add_reference();								// Call the reference based function again
+	cout << "30 + 5 = " << x << endl;					// Display the answer - should be 35
+
 	return 0;
 	// ************************* //
 }
