@@ -6,6 +6,8 @@
 #include <condition_variable>
 #include <chrono>
 #include <atomic>
+#include <future>
+#include <random>
 #include "guarded.h"
 #include "threadsafe_stack.h"
 
@@ -126,6 +128,17 @@ void popper(shared_ptr<threadsafe_stack<unsigned int>> stack)
 	}
 }
 
+unsigned int find_max(const vector<unsigned int> &data, size_t start, size_t end)
+{
+	unsigned int max = 0;							// Set max initially to 0
+	for (unsigned int i = start; i < end; ++i) {	// Iterate across vector from start to end position, setting max accordingly
+		if (data.at(i) > max) {
+			max = data.at(i);
+		}
+	}
+	return max;										// Return max
+}
+
 int main(int argc, char **argv)
 {
 	/* Example 1 - Thread Incrementing to Output /
@@ -202,7 +215,7 @@ int main(int argc, char **argv)
 	cout << "Value = " << *value << endl;					// Display the value
 	// ************************* //
 
-	/* Example 6 - Atomic Flags */
+	/* Example 6 - Atomic Flags /
 	auto flag = make_shared<atomic_flag>();					// Create shared flag
 
 	auto num_threads = thread::hardware_concurrency();		// Get number of hardware threads
@@ -215,6 +228,36 @@ int main(int argc, char **argv)
 	for (auto &t : threads) {								// Join threads
 		t.join();
 	}
+
+	return 0;
+	// ************************* //
+
+	/* Example 7 - Futures */
+	auto num_threads = thread::hardware_concurrency();					// Get the number of supported threads
+
+	vector<unsigned int> values;										// Create a vector with 2^24 random values
+	auto millis = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	default_random_engine e(static_cast<unsigned int>(millis.count()));
+	for (unsigned int i = 0; i < pow(2, 24); ++i) {
+		values.push_back(e());
+	}
+
+	vector<future<unsigned int>> futures;								// Create num threads - 1 futures
+	auto range = static_cast<size_t>(pow(2, 24) / num_threads);
+	for (size_t i = 0; i < num_threads - 1; ++i) {
+		futures.push_back(async(find_max, ref(values), i * range, (i + 1) * range));		// Range is used to determine number of values to process
+	}
+		
+	auto max = find_max(values, (num_threads - 1) * range, num_threads * range);			// Main application thread will process the end of the list
+
+	for (auto &f : futures) {											// Now get the results from the futures, setting max accordingly
+		auto result = f.get();
+		if (result > max) {
+			max = result;
+		}
+	}
+
+	cout << "Maximum value found: " << max << endl;
 
 	return 0;
 	// ************************* //
