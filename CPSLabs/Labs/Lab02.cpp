@@ -5,6 +5,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
+#include <atomic>
 #include "guarded.h"
 #include "threadsafe_stack.h"
 
@@ -13,8 +14,16 @@ using namespace chrono;
 using namespace std::this_thread;
 
 mutex mut;
+atomic<int> value;
 constexpr unsigned int NUM_ITERATIONS = 1000000;
 constexpr unsigned int NUM_THREADS = 4;
+
+void atomic_increment(shared_ptr<atomic<int>> value)
+{
+	for (unsigned int i = 0; i < 1000000; ++i) {		// Loop 1 million times, incrementing value
+		(*value)++;										// Increment value
+	}
+}
 
 void increment(shared_ptr<int> value)
 {
@@ -153,7 +162,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 4 - Threadsafe Stacks */
+	/* Example 4 - Threadsafe Stacks /
 	auto stack = make_shared<threadsafe_stack<unsigned int>>();	// Create a threadsafe_stack
 
 	thread t1(popper, stack);									// Create two threads
@@ -165,5 +174,21 @@ int main(int argc, char **argv)
 	cout << "Stack empty = " << stack->empty() << endl;			// Check if stack is empty
 
 	return 0;
+	// ************************* //
+
+	/* Example 5 - Atomics */
+	auto value = make_shared<atomic<int>>();				// Create a shared int value
+
+	auto num_threads = thread::hardware_concurrency();		// Create number of threads hardware natively supports
+	vector<thread> threads;
+	for (unsigned int i = 0; i < num_threads; ++i) {
+		threads.push_back(thread(atomic_increment, value));
+	}
+
+	for (auto &t : threads) {
+		t.join();											// Join the threads
+	}
+
+	cout << "Value = " << *value << endl;					// Display the value
 	// ************************* //
 }
