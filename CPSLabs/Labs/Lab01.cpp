@@ -5,12 +5,13 @@
 #include <chrono>
 #include <functional>
 #include <fstream>
+#include <cstddef>
 
 using namespace std;
 using namespace std::chrono;
 using namespace std::this_thread;
 
-constexpr size_t num_threads = 100;		// constexpr = The constexpr specifier declares that it is possible to evaluate the value of the function or variable at compile time
+constexpr std::size_t num_threads = 100;		// constexpr = The constexpr specifier declares that it is possible to evaluate the value of the function or variable at compile time
 
 /* This is the function called by the thread in example 1 */
 void hello_world()
@@ -42,7 +43,7 @@ void task_two()	// Example 2
 	cout << "Task two ending" << endl;
 }
 
-void task(size_t n, int val)
+void task(std::size_t n, int val)
 {
 	cout << "Thread: " << n << " Random Value: " << val << endl;
 }
@@ -55,7 +56,7 @@ void work()
 	}
 }
 
-void monte_carlo_pi(size_t iterations)
+void monte_carlo_pi(std::size_t iterations)
 {
 	std::random_device r;										// Seed with real random number if available
 	default_random_engine e(r());								// Create random number generator
@@ -63,7 +64,7 @@ void monte_carlo_pi(size_t iterations)
 
 	unsigned int in_circle = 0;									// Keep track of number of points in circle
 		
-	for (size_t i = 0; i < iterations; ++i) {					// Iterate	
+	for (std::size_t i = 0; i < iterations; ++i) {					// Iterate	
 		auto x = distribution(e);								// Generate random point(s)
 		auto y = distribution(e);
 		
@@ -105,7 +106,7 @@ int main(int argc, char **argv)
 	default_random_engine e(r());		// Create random number generator
 
 	vector<thread> threads;
-	for (size_t i = 0; i < num_threads; ++i) {
+	for (std::size_t i = 0; i < num_threads; ++i) {
 		threads.push_back(thread(task, i, e()));		// Create 100 threads in a vector
 	}
 
@@ -176,15 +177,15 @@ int main(int argc, char **argv)
 	/* Example 7 - Monte Carlo Pi Distributions */
 	ofstream data("montecarlo.csv", ofstream::out);					// Create data file
 
-	for (size_t num_threads = 0; num_threads <= 6; ++num_threads) {
+	for (std::size_t num_threads = 0; num_threads <= 6; ++num_threads) {
 		auto total_threads = static_cast<unsigned int>(pow(2.0, num_threads));	// Calculate number of threads
 		cout << "Number of threads = " << total_threads << endl;	// Output number of threads
 		data << "num_threads_" << total_threads;					// Serialise number of threads to the file
 		
-		for (size_t iters = 0; iters < 100; ++iters) {				// Now execute 100 iterations
+		for (std::size_t iters = 0; iters < 100; ++iters) {				// Now execute 100 iterations
 			auto start = system_clock::now();						// Get the start time
 			vector<thread> threads;									// We need to create total_threads threads
-			for (size_t n = 0; n < total_threads; ++n) {
+			for (std::size_t n = 0; n < total_threads; ++n) {
 				threads.push_back(thread(monte_carlo_pi, static_cast<unsigned int>(pow(2.0, 24.0 - num_threads))));		// Working in base 2 to make things a bit easier
 			}
 			for (auto &t : threads) {
