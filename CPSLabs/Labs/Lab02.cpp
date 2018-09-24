@@ -25,6 +25,16 @@ void atomic_increment(shared_ptr<atomic<int>> value)
 	}
 }
 
+void flag_task(unsigned int id, shared_ptr<atomic_flag> flag)
+{
+	for (unsigned int i = 0; i < 10; ++i) {						// Do 10 iterations
+		while (flag->test_and_set());							// Test the flag is available, and grab when it is. Notice this while loops keeps spinning until flag is clear
+		cout << "Thread " << id << " running " << i << endl;	// Flag is available.  Thread displays message
+		this_thread::sleep_for(seconds(1));						// Sleep for 1 second
+		flag->clear();											// Clear the flag
+	}
+}
+
 void increment(shared_ptr<int> value)
 {
 	for (unsigned int i = 0; i < 1000000; ++i) {	// Loop 1 million times, incrementing value
@@ -176,7 +186,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 5 - Atomics */
+	/* Example 5 - Atomics /
 	auto value = make_shared<atomic<int>>();				// Create a shared int value
 
 	auto num_threads = thread::hardware_concurrency();		// Create number of threads hardware natively supports
@@ -190,5 +200,22 @@ int main(int argc, char **argv)
 	}
 
 	cout << "Value = " << *value << endl;					// Display the value
+	// ************************* //
+
+	/* Example 6 - Atomic Flags */
+	auto flag = make_shared<atomic_flag>();					// Create shared flag
+
+	auto num_threads = thread::hardware_concurrency();		// Get number of hardware threads
+
+	vector<thread> threads;									// Create threads
+	for (unsigned int i = 0; i < num_threads; ++i) {
+		threads.push_back(thread(flag_task, i, flag));
+	}
+
+	for (auto &t : threads) {								// Join threads
+		t.join();
+	}
+
+	return 0;
 	// ************************* //
 }
