@@ -6,6 +6,7 @@
 #include <condition_variable>
 #include <chrono>
 #include "guarded.h"
+#include "threadsafe_stack.h"
 
 using namespace std;
 using namespace chrono;
@@ -82,6 +83,30 @@ void task_2(condition_variable &condition)
 	cout << "Task 2 finished" << endl;									// Print finished message
 }
 
+void pusher(shared_ptr<threadsafe_stack<unsigned int>> stack)
+{
+	for (unsigned int i = 0; i < 1000000; ++i) {		// Pusher will push 1 million values onto the stack
+		stack->push(i);	
+		this_thread::yield();							// Make the pusher yield.  Will give priority to another thread
+	}
+}
+
+void popper(shared_ptr<threadsafe_stack<unsigned int>> stack)
+{
+	// Popper will pop 1 million values from the stack.
+	// We do this using a counter and a while loop
+	unsigned int count = 0;
+	while (count < 1000000) {
+		try {
+			auto val = stack->pop();		// Try and pop a value
+			++count;						// Item popped.  Increment count
+		}
+		catch (exception e) {
+			cout << e.what() << endl;		// Item not popped.  Display message
+		}
+	}
+}
+
 int main(int argc, char **argv)
 {
 	/* Example 1 - Thread Incrementing to Output /
@@ -112,7 +137,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 3 - Object Guarding */
+	/* Example 3 - Object Guarding /
 	auto g = make_shared<guarded>();				// Create guarded object
 
 	vector<thread> threads;							// Create threads
@@ -124,6 +149,20 @@ int main(int argc, char **argv)
 	}
 
 	cout << "Value = " << g->get_value() << endl;	// Display value stored in guarded object
+
+	return 0;
+	// ************************* //
+
+	/* Example 4 - Threadsafe Stacks */
+	auto stack = make_shared<threadsafe_stack<unsigned int>>();	// Create a threadsafe_stack
+
+	thread t1(popper, stack);									// Create two threads
+	thread t2(pusher, stack);
+
+	t1.join();													// Join two threads
+	t2.join();
+
+	cout << "Stack empty = " << stack->empty() << endl;			// Check if stack is empty
 
 	return 0;
 	// ************************* //

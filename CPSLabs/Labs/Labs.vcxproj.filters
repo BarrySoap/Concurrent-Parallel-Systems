@@ -21,6 +21,9 @@
     <ClInclude Include="guarded.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="threadsafe_stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Lab02.cpp">

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="guarded.h" />
     <ClInclude Include="Lab02.h" />
+    <ClInclude Include="threadsafe_stack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="guarded.cpp" />
