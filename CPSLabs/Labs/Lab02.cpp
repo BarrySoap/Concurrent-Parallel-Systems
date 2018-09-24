@@ -12,9 +12,10 @@ mutex mut;
 void increment(shared_ptr<int> value)
 {
 	for (unsigned int i = 0; i < 1000000; ++i) {	// Loop 1 million times, incrementing value
-		mut.lock();									// Acquire the lock
+		lock_guard<mutex> lock(mut);				// Create the lock guard - automatically acquires mutex
 		*value = *value + 1;						// Increment value
-		mut.unlock();								// Release the lock
+		// lock guard is automatically destroyed at the end of the loop scope
+		// This will release the lock
 	}
 }
 
