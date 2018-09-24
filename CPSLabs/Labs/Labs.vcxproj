@@ -19,9 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="guarded.h" />
     <ClInclude Include="Lab02.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="guarded.cpp" />
     <ClCompile Include="Lab02.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

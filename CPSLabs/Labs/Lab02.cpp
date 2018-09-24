@@ -5,12 +5,15 @@
 #include <mutex>
 #include <condition_variable>
 #include <chrono>
+#include "guarded.h"
 
 using namespace std;
 using namespace chrono;
 using namespace std::this_thread;
 
 mutex mut;
+constexpr unsigned int NUM_ITERATIONS = 1000000;
+constexpr unsigned int NUM_THREADS = 4;
 
 void increment(shared_ptr<int> value)
 {
@@ -19,6 +22,13 @@ void increment(shared_ptr<int> value)
 		*value = *value + 1;						// Increment value
 		// lock guard is automatically destroyed at the end of the loop scope
 		// This will release the lock
+	}
+}
+
+void task(shared_ptr<guarded> g)
+{
+	for (unsigned int i = 0; i < NUM_ITERATIONS; ++i) {
+		g->increment();								// Increment guarded object NUM_ITERATIONS times
 	}
 }
 
@@ -90,14 +100,30 @@ int main(int argc, char **argv)
 	cout << "Value = " << *value << endl;			// Display the value
 	// ************************* //
 
-	/* Example 2 - Condition Variables */
+	/* Example 2 - Condition Variables /
 	condition_variable condition;					// Create condition variable
 
 	thread t1(task_1, ref(condition));				// Create two threads
-	thread t2(task_2, ref(condition));
+	thread t2(task_2, ref(condition));				// ref is used to create a reference to pass to our thread functions
 
 	t1.join();										// Join two threads
 	t2.join();
+
+	return 0;
+	// ************************* //
+
+	/* Example 3 - Object Guarding */
+	auto g = make_shared<guarded>();				// Create guarded object
+
+	vector<thread> threads;							// Create threads
+	for (unsigned int i = 0; i < NUM_THREADS; ++i) {
+		threads.push_back(thread(task, g));
+	}
+	for (auto &t : threads) {
+		t.join();									// Join threads
+	}
+
+	cout << "Value = " << g->get_value() << endl;	// Display value stored in guarded object
 
 	return 0;
 	// ************************* //
