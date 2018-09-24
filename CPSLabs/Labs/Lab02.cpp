@@ -2,33 +2,35 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <mutex>
 
 using namespace std;
 using namespace std::this_thread;
 
+mutex mut;
+
 void increment(shared_ptr<int> value)
 {
-	// Loop 1 million times, incrementing value
-	for (unsigned int i = 0; i < 1000000; ++i)
-		// Increment value
-		*value = *value + 1;
+	for (unsigned int i = 0; i < 1000000; ++i) {	// Loop 1 million times, incrementing value
+		mut.lock();									// Acquire the lock
+		*value = *value + 1;						// Increment value
+		mut.unlock();								// Release the lock
+	}
 }
 
 int main(int argc, char **argv)
 {
-	// Create a shared int value
-	auto value = make_shared<int>(0);
+	auto value = make_shared<int>(0);					// Create a shared int value
 
-	// Create number of threads hardware natively supports
-	auto num_threads = thread::hardware_concurrency();
+	auto num_threads = thread::hardware_concurrency();	// Create number of threads hardware natively supports
 	vector<thread> threads;
-	for (unsigned int i = 0; i < num_threads; ++i)
+	for (unsigned int i = 0; i < num_threads; ++i) {
 		threads.push_back(thread(increment, value));
+	}
 
-	// Join the threads
-	for (auto &t : threads)
-		t.join();
+	for (auto &t : threads) {
+		t.join();									// Join the threads
+	}
 
-	// Display the value
-	cout << "Value = " << *value << endl;
+	cout << "Value = " << *value << endl;			// Display the value
 }
