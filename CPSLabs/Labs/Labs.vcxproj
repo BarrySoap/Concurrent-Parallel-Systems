@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lab01.h" />
+    <ClInclude Include="Lab02.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lab01.cpp" />
+    <ClCompile Include="Lab02.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
