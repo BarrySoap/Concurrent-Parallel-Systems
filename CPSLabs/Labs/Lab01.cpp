@@ -6,6 +6,7 @@
 #include <functional>
 #include <fstream>
 #include <cstddef>
+#include <future>
 
 using namespace std;
 using namespace std::chrono;
@@ -75,6 +76,24 @@ void monte_carlo_pi(std::size_t iterations)
 		}
 	}
 	auto pi = (4.0 * in_circle) / static_cast<double>(iterations);		// Calculate pi (not returned)
+}
+
+void new_monte_carlo_pi(size_t iterations, promise<double> pi)
+{
+	random_device r;											// Seed with real random number if available
+	default_random_engine e(r());								// Create random number generator
+	uniform_real_distribution<double> distribution(0.0, 1.0);	// Create a distribution - we want doubles between 0.0 and 1.0
+
+	unsigned int in_circle = 0;									// Keep track of number of points in circle
+	for (size_t i = 0; i < iterations; ++i) {					// Iterate
+		auto x = distribution(e);								// Generate random point(s)
+		auto y = distribution(e);
+		auto length = sqrt((x * x) + (y * y));					// Get length of vector defined - use Pythagoras
+		if (length <= 1.0) {									// Check if in circle
+			++in_circle;
+		}
+	}
+	pi.set_value((4.0 * in_circle) / static_cast<double>(iterations));	// Calculate pi
 }
 
 
@@ -174,7 +193,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 7 - Monte Carlo Pi Distributions */
+	/* Example 7 - Monte Carlo Pi Distributions /
 	ofstream data("montecarlo.csv", ofstream::out);					// Create data file
 
 	for (std::size_t num_threads = 0; num_threads <= 6; ++num_threads) {
@@ -182,7 +201,7 @@ int main(int argc, char **argv)
 		cout << "Number of threads = " << total_threads << endl;	// Output number of threads
 		data << "num_threads_" << total_threads;					// Serialise number of threads to the file
 		
-		for (std::size_t iters = 0; iters < 100; ++iters) {				// Now execute 100 iterations
+		for (std::size_t iters = 0; iters < 100; ++iters) {			// Now execute 100 iterations
 			auto start = system_clock::now();						// Get the start time
 			vector<thread> threads;									// We need to create total_threads threads
 			for (std::size_t n = 0; n < total_threads; ++n) {
@@ -194,6 +213,42 @@ int main(int argc, char **argv)
 			auto end = system_clock::now();							// Get the end time
 			auto total = end - start;								// Get the total time
 			data << ", " << duration_cast<milliseconds>(total).count();		// Convert to milliseconds and output to file
+		}
+		data << endl;
+	}
+	data.close();				// Close the file
+	return 0;
+	// ************************* //
+
+	/* EXTRA Example - Monte Carlo Pi Distributions using Futures/Promises */
+	ofstream data("montecarlo.csv", ofstream::out);					// Create data file
+
+	for (std::size_t num_threads = 0; num_threads <= 6; ++num_threads) {
+		auto total_threads = static_cast<unsigned int>(pow(2.0, num_threads));
+		cout << "Number of threads = " << total_threads << endl;	// Write number of threads
+		data << "num_threads_" << total_threads;					// Write number of threads to the file
+
+		for (size_t iters = 0; iters < 100; ++iters) {				// Now execute 100 iterations
+			auto start = system_clock::now();						// Get the start time
+			vector<future<double>> futures;							// We need to create total_threads threads
+			vector<thread> threads;
+			for (size_t n = 0; n < total_threads; ++n) {
+				promise<double> pi;									// Create promise
+				futures.push_back(pi.get_future());					// Store future
+				threads.push_back(thread(new_monte_carlo_pi, static_cast<unsigned int>(pow(2.0, 24.0 - num_threads)), move(pi)));	// Working in base 2 to make things a bit easier
+			}
+			double pi = 0.0;										// Calculate pi from futures
+			for (auto &f : futures) {
+				pi += f.get();
+			}
+			pi /= static_cast<double>(total_threads);
+			for (auto &t : threads) {								// Join the threads (wait for them to finish)
+				t.join();
+			}
+			auto end = system_clock::now();							// Get the end time
+			auto total = end - start;								// Get the total time
+			cout << "pi = " << pi << " in " << duration_cast<milliseconds>(total).count() << " ms" << endl;		// Print result
+			data << ", " << duration_cast<milliseconds>(total).count();											// Convert to milliseconds and output to file
 		}
 		data << endl;
 	}
