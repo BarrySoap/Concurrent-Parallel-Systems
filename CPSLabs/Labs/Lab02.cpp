@@ -20,6 +20,20 @@ atomic<int> value;
 constexpr unsigned int NUM_ITERATIONS = 1000000;
 constexpr unsigned int NUM_THREADS = 4;
 
+/* Mandelbrot Fractal Values */
+constexpr size_t max_iterations = 1000;										// Number of iterations to perform to find pixel value
+
+constexpr size_t dim = 8192;												// Dimension of the image (in pixels) to generate
+
+constexpr double xmin = -2.1;
+constexpr double xmax = 1.0;												// Mandelbrot dimensions are ([-2.1, 1.0], [-1.3, 1.3])
+constexpr double ymin = -1.3;
+constexpr double ymax = 1.3;
+
+constexpr double integral_x = (xmax - xmin) / static_cast<double>(dim);		// The conversion from Mandelbrot coordinate to image coordinate
+constexpr double integral_y = (ymax - ymin) / static_cast<double>(dim);
+// ************************* //
+
 void atomic_increment(shared_ptr<atomic<int>> value)
 {
 	for (unsigned int i = 0; i < 1000000; ++i) {		// Loop 1 million times, incrementing value
@@ -139,6 +153,33 @@ unsigned int find_max(const vector<unsigned int> &data, size_t start, size_t end
 	return max;										// Return max
 }
 
+vector<double> mandelbrot(size_t start_y, size_t end_y)
+{
+	double x, y, x1, y1, xx = 0.0;									// Declare values we will use
+	size_t loop_count = 0;
+	vector<double> results;											// Where to store the results
+
+	y = ymin + (start_y * integral_y);
+	for (size_t y_coord = start_y; y_coord < end_y; ++y_coord) {	// Loop through each line
+		x = xmin;
+		for (size_t x_coord = 0; x_coord < dim; ++x_coord) {		// Loop through each pixel on the line
+			x1 = 0.0, y1 = 0.0;
+			loop_count = 0;
+			while (loop_count < max_iterations && sqrt((x1 * x1) + (y1 * y1)) < 2.0) {				// Calculate Mandelbrot value
+				++loop_count;
+				xx = (x1 * x1) - (y1 * y1) + x;
+				y1 = 2 * x1 * y1 + y;
+				x1 = xx;
+			}
+			auto val = static_cast<double>(loop_count) / static_cast<double>(max_iterations);		// Get value where loop completed
+			results.push_back(val);									// Push this value onto the vector
+			x += integral_x;										// Increase x based on integral
+		}
+		y += integral_y;											// Increase y based on integral
+	}
+	return results;													// Return vector
+}
+
 int main(int argc, char **argv)
 {
 	/* Example 1 - Thread Incrementing to Output /
@@ -232,7 +273,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 7 - Futures */
+	/* Example 7 - Futures /
 	auto num_threads = thread::hardware_concurrency();					// Get the number of supported threads
 
 	vector<unsigned int> values;										// Create a vector with 2^24 random values
@@ -258,6 +299,24 @@ int main(int argc, char **argv)
 	}
 
 	cout << "Maximum value found: " << max << endl;
+
+	return 0;
+	// ************************* //
+
+	/* Example 8 - Mandelbrot Fractals */
+	auto num_threads = thread::hardware_concurrency();		// Get the number of supported threads
+
+	size_t strip_height = dim / num_threads;				// Determine strip height
+
+	vector<future<vector<double>>> futures;					// Create futures
+	for (unsigned int i = 0; i < num_threads; ++i) {
+		futures.push_back(async(mandelbrot, i * strip_height, (i + 1) * strip_height));		// Range is used to determine number of values to process
+	}
+		
+	vector<vector<double>> results;							// Vector to store results
+	for (auto &f : futures) {								// Get results
+		results.push_back(f.get());
+	}
 
 	return 0;
 	// ************************* //

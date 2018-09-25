@@ -15,12 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lab01.h">
+    <ClInclude Include="Lab02.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="guarded.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lab01.cpp">
+    <ClCompile Include="Lab02.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="guarded.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
