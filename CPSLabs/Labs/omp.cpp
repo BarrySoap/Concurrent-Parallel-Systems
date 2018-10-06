@@ -99,6 +99,19 @@ void trap(function<double(double)> f, double start, double end, size_t iteration
 	*p += my_result;
 }
 
+double f(unsigned int i)							// Let's create a function that relies on i to determine the amount of work
+{
+	auto start = i * (i + 1) / 2;					// Calculate start and end values
+	auto end = start + i;
+	auto result = 0.0;								// Declare return value
+
+	for (auto j = start; j <= end; ++j) {			// Loop for number of iterations, calculating sin
+		result += sin(j);
+	}
+
+	return result;									// Return result
+}
+
 int main(int argc, char **argv)
 {
 	/* Example 1 - Hello World Threading /
@@ -157,7 +170,7 @@ int main(int argc, char **argv)
 	return 0;
 	/*************************************/
 
-	/* Example 4 - Trapezoidal Function (Area Under a Curve) */
+	/* Example 4 - Trapezoidal Function (Area Under a Curve) /
 	auto result = make_shared<double>(0.0);					// Declare shared result
 	auto start = 0.0;										// Define start and end values
 	auto end = 3.14159265359;								// pi
@@ -171,6 +184,23 @@ int main(int argc, char **argv)
 
 	cout << "Using " << trapezoids << " trapezoids. ";		// Output result
 	cout << "Estimated integral of function " << start << " to " << end << " = " << *result << endl;
+
+	return 0;
+	/*************************************/
+
+	/* Example 5 - Task Scheduling */
+	auto thread_count = thread::hardware_concurrency();		// Get number of hardware threads
+	auto n = static_cast<size_t>(pow(2, 14));				// Define number of iterations to calculate
+	auto sum = 0.0;											// Declare sum value
+
+	auto start = system_clock::now();						// Get start time
+#pragma omp parallel for num_threads(thread_count) reduction(+:sum) schedule(static, 1)
+	for (auto i = 0; i <= n; ++i) {
+		sum += f(i);
+	}
+	auto end = system_clock::now();							// Get end time
+	auto total = duration_cast<milliseconds>(end - start).count();		// Calculate and output total time
+	cout << "Total time: " << total << "ms" << endl;
 
 	return 0;
 	/*************************************/
