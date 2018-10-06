@@ -72,6 +72,33 @@ void parallel_sort(vector<unsigned int>& values)
 	}
 }
 
+void trap(function<double(double)> f, double start, double end, size_t iterations, shared_ptr<double> p)
+{
+	/*	f			the function we are using to generate the curve.
+		start		the starting value we will place in the function.
+		end			the end value we will place in the function.
+		iterations	the number of iterations(or trapezoids) we will generate.
+		p			a shared piece of data to store the result.					*/
+
+	auto my_rank = omp_get_thread_num();						// Get thread number
+	auto thread_count = omp_get_num_threads();					// Get number of threads
+	auto slice_size = (end - start) / iterations;				// Calculation iteration slice size
+	auto iterations_thread = iterations / thread_count;			// Calculate number of iterations per thread
+	auto local_start = start + ((my_rank * iterations_thread) * slice_size);		// Calculate this thread's start point
+	auto local_end = local_start + iterations_thread * slice_size;					// Calculate this thread's end point
+	auto my_result = (f(local_start) + f(local_end)) / 2.0;		// Calculate initial result
+
+	double x;													// Declare x before the loop - stops it being allocated and destroyed each iteration
+	for (size_t i = 0; i <= iterations_thread - 1; ++i) {		// Sum each iteration
+		x = local_start + i * slice_size;						// Calculate next slice to calculate x
+		my_result += f(x);										// Add to current result
+	}
+	my_result *= slice_size;									// Multiply the result by the slice size
+
+#pragma omp critical											// Critical section - add to the shared data// Critical section - add to the shared data
+	*p += my_result;
+}
+
 int main(int argc, char **argv)
 {
 	/* Example 1 - Hello World Threading /
@@ -108,8 +135,9 @@ int main(int argc, char **argv)
 	return 0;
 	/*************************************/
 
-	/* Example 3 - Bubble Sorting */
+	/* Example 3 - Bubble Sorting/Parallel Sorting /
 	ofstream results("bubble.csv", ofstream::out);			// Create results file
+	//ofstream results("parallel.csv", ofstream::out);
 	for (size_t size = 8; size <= 16; ++size) {				// Gather results for 2^8 to 2^16 results
 		results << pow(2, size) << ", ";					// Output data size
 		for (size_t i = 0; i < 100; ++i) {					// Gather 100 results
@@ -125,6 +153,24 @@ int main(int argc, char **argv)
 		results << endl;
 	}
 	results.close();
+
+	return 0;
+	/*************************************/
+
+	/* Example 4 - Trapezoidal Function (Area Under a Curve) */
+	auto result = make_shared<double>(0.0);					// Declare shared result
+	auto start = 0.0;										// Define start and end values
+	auto end = 3.14159265359;								// pi
+	auto trapezoids = static_cast<size_t>(pow(2, 24));		// Defined number of trapezoids to generation
+	auto thread_count = thread::hardware_concurrency();		// Get number of threads
+
+	auto f = [](double x) { return cos(x); };				// Create function to calculate integral. Use cos
+
+#pragma omp parallel num_threads(thread_count)				// Run trap in parallel
+	trap(f, start, end, trapezoids, result);
+
+	cout << "Using " << trapezoids << " trapezoids. ";		// Output result
+	cout << "Estimated integral of function " << start << " to " << end << " = " << *result << endl;
 
 	return 0;
 	/*************************************/
