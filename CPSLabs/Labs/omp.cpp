@@ -42,6 +42,35 @@ void bubble_sort(vector<unsigned int>& values)
 	}
 }
 
+void parallel_sort(vector<unsigned int>& values)
+{
+	auto num_threads = thread::hardware_concurrency();			// Get the number of threads
+	auto n = values.size();										// Get the number of elements in the vector
+	int i, tmp, phase;											// Declare the variables used in the loop
+#pragma omp parallel num_threads(num_threads) default(none) shared(values, n) private(i, tmp, phase)		// Declare parallel section
+	for (phase = 0; phase < n; ++phase) {
+		if (phase % 2 == 0) {									// Determine which phase of the sort we are in
+#pragma omp for
+			for (i = 1; i < n; i += 2) {						// Parallel for loop.  Each thread jumps forward 2 so no conflict
+				if (values[i - 1] > values[i]) {				// Check if we should swap values
+					tmp = values[i - 1];						// Swap values
+					values[i - 1] = values[i];
+					values[i] = tmp;
+				}
+			}
+		}
+		else {
+#pragma omp for
+			for (i = 1; i < n; i += 2) {						// Parallel for loop.  Each thread jumps forward 2 so no conflict
+				if (values[i] > values[i + 1]) {				// Check is we should swap values
+					tmp = values[i + 1];						// Swap values
+					values[i + 1] = values[i];
+					values[i] = tmp;
+				}
+			}
+		}
+	}
+}
 
 int main(int argc, char **argv)
 {
@@ -88,7 +117,7 @@ int main(int argc, char **argv)
 			auto data = generate_values(static_cast<size_t>(pow(2, size)));
 			cout << "Sorting" << endl;						// Sort the vector
 			auto start = system_clock::now();
-			bubble_sort(data);
+			parallel_sort(data);
 			auto end = system_clock::now();
 			auto total = duration_cast<milliseconds>(end - start).count();
 			results << total << ",";						// Output time
