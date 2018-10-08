@@ -15,12 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="omp.cpp">
+    <ClCompile Include="lab04.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="omp.h">
+    <ClInclude Include="lab04.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
