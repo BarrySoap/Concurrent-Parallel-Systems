@@ -4,12 +4,21 @@
 \usepackage{amsmath}
 \usepackage[parfill]{parskip}
 \usepackage{graphicx}
+\usepackage[top=1.0in, bottom=1.0in, left=1.0in, right=1.0in]{geometry}
+\graphicspath{{../Images/}}
 
-\title{\vspace{-4cm}Concurrent \& Parallel Systems - Coursework 1 Report}
+\title{\vspace{-3cm}Concurrent \& Parallel Systems - Coursework 1 Report}
 
 \author{Glenn Wilkie-Sullivan - 40208762}
 
 \date{\today}
+
+\makeatletter
+\newcommand{\mypm}{\mathbin{\mathpalette\@mypm\relax}}
+\newcommand{\@mypm}[2]{\ooalign{%
+  \raisebox{.1\height}{$#1+$}\cr
+  \smash{\raisebox{-.6\height}{$#1-$}}\cr}}
+\makeatother
 
 \begin{document}
 \maketitle
@@ -22,6 +31,14 @@
 
 
 \section{Initial Analysis}
+To analyse the performance and overall CPU usage of the blockchain application, I used the Visual Studio 2017 diagnostic tools. To start with, I ran the application to examine the overall performance, as well as any potential bottlenecks in the code. Unsurprisingly, the performance of the application hinges mainly on the 'difficulty' variable, which the programmer can control. After 5 runs, the application, with difficulty 5, mined 5 blocks in about 43 $\mypm$ 10 seconds. With difficulty 6, the application mined 5 blocks in about 382 $\mypm$ 30 seconds. \\
+As for bottlenecking, the application has a few instances of it. The most effective method of finding the bottleneck was to use Visual Studio's debugging tools, between a range of difficulties. The results after running the application with difficulty 6 was as follows: \\
+
+\begin{figure}[H] % <--- Fix spacing!!
+	\centering
+		\includegraphics[width=0.6\textwidth]{"CPU Usage Diff(6)"}
+		\caption{Difficulty 6 CPU Usage}
+\end{figure}
 
 \section{Methodology}
 
