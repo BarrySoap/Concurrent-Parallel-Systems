@@ -47,7 +47,7 @@ As for bottlenecking, the application has a few instances of it. The most effect
 		\caption{Difficulty 6 CPU Usage}
 \end{figure}
 
-From this image, I was able to delve into each individual method (add\_block, mine\_block, calculate\_hash), which let me see the CPU usage for each line of code. The add\_block method runs the mine\_block method, which then runs the calculate\_hash method. Within this, there is a hashing function which seems to be the main usage of CPU time, called 'SHA256'. After using the diagnostic tools, the following CPU usage percentages were shown: \\
+From this image, I was able to delve into each individual method (add\_block, mine\_block, calculate\_hash), which let me see the CPU usage for each line of code. The add\_block method runs the mine\_block method, which then runs the calculate\_hash method. Within this, there is a hashing function which seems to be the main usage of CPU time, called 'SHA256'. After using the diagnostic tools, the following CPU usage percentages were shown:
 
 \begin{figure}[H]
 	\centering
@@ -62,7 +62,15 @@ As it is called within the main while loop of calculate\_hash, this line seems t
 \item Difficulty 3: 3,989,869 iterations (1,476.5\% increase from base),
 \item Difficulty 4: 62,918,025 iterations (1,476.9\% increase from difficulty 3).
 \end{itemize}
-From this, we can safely say that each step in difficulty will have the same \% increase. Based on these exponential values, it is clear why a bottleneck occurs within this function. Using this \% increase, we can estimate a mining of 1000 blocks at difficulty 5 to have around 991,902,664 iterations. At difficulty 6, 15,637,345,497 iterations. Assuming this function can be ran multiple times concurrently, that theoretically should decrease execution time by a substantial amount - however, creating threads specifically for this function may be costly itself.
+From this, we can safely say that each step in difficulty will have the same \% increase. Based on these exponential values, it is clear why a bottleneck occurs within this function. Using this \% increase, we can estimate a mining of 1000 blocks at difficulty 5 to have around 991,902,664 iterations. At difficulty 6, 15,637,345,497 iterations. Assuming this function can be ran multiple times concurrently, that theoretically should decrease execution time by a substantial amount - however, creating threads specifically for this function may be costly itself. Another line worth considering is the initialisation of the stringstream which is passed as a parameter to the hashing algorithm. As seen below, \\
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.99\textwidth]{"stringstreamusage"}
+		\caption{stringstream Initialisation CPU Usage}
+\end{figure}
+
+The stringstream initialisation uses 20\% of the CPU resource, as opposed to the hashing function's 64\% - this is likely due to the amount of times the 'stringstream' object is being initialised. Moving the object constructor out of this method would likely increase the program speedup somewhat. \\
 
 \section{Methodology}
 
