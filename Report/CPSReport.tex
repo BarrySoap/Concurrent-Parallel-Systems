@@ -4,6 +4,7 @@
 \usepackage{amsmath}
 \usepackage[parfill]{parskip}
 \usepackage{graphicx}
+\usepackage{float}
 \usepackage[top=1.0in, bottom=1.0in, left=1.0in, right=1.0in]{geometry}
 \graphicspath{{../Images/}}
 
@@ -31,14 +32,35 @@
 
 
 \section{Initial Analysis}
+In my analysis of the application, I used a laptop with the following specifications:
+\begin{itemize}
+\item Intel Core i7-6700HQ @ 2.60GHz (4 cores, 8 threads)
+\item 8GB RAM (DDR4)
+\end{itemize}
 To analyse the performance and overall CPU usage of the blockchain application, I used the Visual Studio 2017 diagnostic tools. To start with, I ran the application to examine the overall performance, as well as any potential bottlenecks in the code. Unsurprisingly, the performance of the application hinges mainly on the 'difficulty' variable, which the programmer can control. After 5 runs, the application, with difficulty 5, mined 5 blocks in about 43 $\mypm$ 10 seconds. With difficulty 6, the application mined 5 blocks in about 382 $\mypm$ 30 seconds. \\
 As for bottlenecking, the application has a few instances of it. The most effective method of finding the bottleneck was to use Visual Studio's debugging tools, between a range of difficulties. The results after running the application with difficulty 6 was as follows: \\
 
-\begin{figure}[H] % <--- Fix spacing!!
+\begin{figure}[H]
 	\centering
-		\includegraphics[width=0.6\textwidth]{"CPU Usage Diff(6)"}
+		\includegraphics[width=0.55\textwidth]{"CPU Usage Diff(6)"}
 		\caption{Difficulty 6 CPU Usage}
 \end{figure}
+
+From this image, I was able to delve into each individual method (add\_block, mine\_block, calculate\_hash), which let me see the CPU usage for each line of code. The add\_block method runs the mine\_block method, which then runs the calculate\_hash method. Within this, there is a hashing function which seems to be the main usage of CPU time, called 'SHA256'. After using the diagnostic tools, the following CPU usage percentages were shown: \\
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.99\textwidth]{"SHA256"}
+		\caption{SHA256 Function CPU Usage}
+\end{figure}
+
+As it is called within the main while loop of calculate\_hash, this line seems to be creating, appending and concatenating a hash-code until it is compared to a specific string, which is passed as a termination condition in the while loop. In order to understand how many times this hashing function is called, I simply added a value which will count the amount of times the function runs. Given that 1000 blocks are mined, the application had to be ran at lower difficulties to test this. The following results were found:
+\begin{itemize}
+\item Difficulty 2 (base): 253,078 iterations,
+\item Difficulty 3: 3,989,869 iterations (1,476.5\% increase from base),
+\item Difficulty 4: 62,918,025 iterations (1,476.9\% increase from difficulty 3).
+\end{itemize}
+On difficulty 2, the hashing function ran 253,078 times. On difficulty 3, the function ran 3,989,869 times - a 1,476.5\% increase.
 
 \section{Methodology}
 
