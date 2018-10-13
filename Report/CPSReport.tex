@@ -60,7 +60,7 @@ As it is called within the main while loop of calculate\_hash, this line seems t
 \item Difficulty 3: 3,989,869 iterations (1,476.5\% increase from base),
 \item Difficulty 4: 62,918,025 iterations (1,476.9\% increase from difficulty 3).
 \end{itemize}
-On difficulty 2, the hashing function ran 253,078 times. On difficulty 3, the function ran 3,989,869 times - a 1,476.5\% increase.
+From this, we can safely say that each step in difficulty will have the same \% increase. Based on these exponential values, it is clear why a bottleneck occurs within this function. Using this \% increase, we can estimate a mining of 1000 blocks at difficulty 5 to have around 991,902,664 iterations. At difficulty 6, 15,637,345,497 iterations. Assuming this function can be ran multiple times concurrently, that theoretically should decrease execution time by a substantial amount.
 
 \section{Methodology}
 
