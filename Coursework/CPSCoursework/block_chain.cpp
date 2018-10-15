@@ -45,7 +45,7 @@ std::string block::calculate_hash() const noexcept
 block_chain::block_chain()
 {
     _chain.emplace_back(block(0, "Genesis Block"));
-    _difficulty = 6;
+    _difficulty = 3;
 }
 
 void block_chain::add_block(block &&new_block) noexcept
