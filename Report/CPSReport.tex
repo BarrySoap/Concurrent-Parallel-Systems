@@ -45,7 +45,7 @@ As for bottlenecking, the application has a few instances of it. The most effect
     \centering
     \begin{tabular}{| l | l | l |}
     \hline
-    Fucntion & CPU Unit Usage & CPU Usage \%  \\ \hline
+    Function & CPU Unit Usage & CPU Usage \%  \\ \hline
     block\_chain::add\_block() & 60052 & 99.46\% \\ \hline
     block::mine\_block() & 60033 & 99.43\% \\ \hline
     block::calculate\_hash() & 54385 & 90.08\% \\ \hline
@@ -55,21 +55,29 @@ As for bottlenecking, the application has a few instances of it. The most effect
     \caption{Individual Function CPU Usage}
 \end{table}
 \medskip
-From these values, I was able to delve into each individual method (add\_block, mine\_block, calculate\_hash) - which let me see the CPU usage for each line of code. The add\_block method runs the mine\_block method, which then runs the calculate\_hash method. Within this, there is a hashing function which seems to be the main usage of CPU time, called 'SHA256'. After using the diagnostic tools, the following CPU usage percentages were shown:
+From these values, I was able to delve into each individual method (add\_block, mine\_block, calculate\_hash) - which let me see the CPU usage for each line of code. The add\_block method runs the mine\_block method, which then runs the calculate\_hash method. Within this, the SHA-256 hashing function seems to be the main usage of CPU time. After using the diagnostic tools, the following CPU usage percentages were shown: \\
 
 \begin{figure}[H]
 	\centering
-		\includegraphics[width=0.99\textwidth]{"SHA256"}
+		\includegraphics[width=0.6\textwidth]{"LightSha"}
 		\caption{SHA256 Function CPU Usage}
 \end{figure}
 
-As it is called within the main while loop of calculate\_hash, this line seems to be creating, appending and concatenating a hash-code until it is compared to a specific string, which is passed as a termination condition in the while loop. In order to understand how many times this hashing function is called, I simply added a value which will count the amount of times the function runs. Given that 1000 blocks are mined, the application had to be ran at lower difficulties to test this. The following results were found:
-\begin{itemize}
-\item Difficulty 1 (base): 15,719 iterations,
-\item Difficulty 2: 253,078 iterations (1,510\% increase from base),
-\item Difficulty 3: 3,989,869 iterations (1,476.5\% increase from base),
-\item Difficulty 4: 62,918,025 iterations (1,476.9\% increase from difficulty 3).
-\end{itemize}
+As it is called within the main while loop of calculate\_hash, this line seems to be creating, appending and concatenating a hash-code until it is compared to a specific string, which is passed as a termination condition in the while loop. In order to understand how many times this hashing function is called, I simply added a value which will count the amount of times the function runs. Given that 1000 blocks are mined, the application had to be ran at lower difficulties to test this. The following results were found: \\
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l | l |}
+    \hline
+    Difficulty & Iterations & \% increase from previous difficulty \%  \\ \hline
+    1 & 15,719 & N/A \\ \hline
+    2 & 253,078 & 1,510\% \\ \hline
+    3 & 3,989,869 & 1,476.5\% \\ \hline
+    4 & 62,918,025 & 1,476.9\% \\ \hline
+    \end{tabular}
+    \caption{Hashing Iterations}
+\end{table}
+
 From this, we can safely say that each step in difficulty will have roughly the same \% increase. Based on these exponential values, it is clear why a bottleneck occurs within this function. Using this \% increase, we can estimate a mining of 1000 blocks at difficulty 5 to have around 991,902,664 iterations. At difficulty 6, 15,637,345,497 iterations. Assuming this function can be ran multiple times concurrently, that theoretically should decrease execution time by a substantial amount - however, creating threads specifically for this function may be costly itself. Another line worth considering is the initialisation of the stringstream which is passed as a parameter to the hashing algorithm. As seen below, \\
 
 \begin{figure}[H]
