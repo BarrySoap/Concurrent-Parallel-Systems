@@ -41,7 +41,8 @@ In my analysis of the application, I used the following processor:
 To analyse the performance and overall CPU usage of the blockchain application, I used the Visual Studio 2017 diagnostic tools - all within Release mode, x86. To start with, I ran the application to examine the overall performance, as well as any potential bottlenecks in the code. Unsurprisingly, the performance of the application hinges mainly on the 'difficulty' variable, which the programmer can control. After 5 runs, the application, with difficulty 5, mined 5 blocks in about 43 $\mypm$ 10 seconds. With difficulty 6, the application mined 5 blocks in about 382 $\mypm$ 30 seconds. \\
 As for bottlenecking, the application has a few instances of it. The most effective method of finding the bottleneck was to use Visual Studio's debugging tools, between a range of difficulties. The results after running the application with difficulty 6 was as follows: \\
 
-\begin{center}
+\begin{table}
+    \centering
     \begin{tabular}{| l | l | l |}
     \hline
     Fucntion & CPU Unit Usage & CPU Usage \%  \\ \hline
@@ -51,8 +52,9 @@ As for bottlenecking, the application has a few instances of it. The most effect
     sha256 & 32785 & 54.30\% \\ \hline
     sprintf & 20667 & 34.23\% \\ \hline
     \end{tabular}
-\end{center}
-
+    \caption{Individual Function CPU Usage}
+\end{table}
+\medskip
 From these values, I was able to delve into each individual method (add\_block, mine\_block, calculate\_hash) - which let me see the CPU usage for each line of code. The add\_block method runs the mine\_block method, which then runs the calculate\_hash method. Within this, there is a hashing function which seems to be the main usage of CPU time, called 'SHA256'. After using the diagnostic tools, the following CPU usage percentages were shown:
 
 \begin{figure}[H]
