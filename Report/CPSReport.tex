@@ -34,10 +34,9 @@
 This project will be analysing, parallelising and optimising a block-chain simulator using the SHA-256 hashing algorithm. According to investopedia, block-chain is, "primarily used to verify transactions, within digital currencies though it is possible to digitize, code and insert practically any document into the blockchain". Each block contains a hash of the previous block, some form of timestamp and data associated to the task, and each block is connected together in a chain resembling a tree-structure. 'SHA, or \textbf{S}ecure \textbf{H}ashing \textbf{A}lgorithm', is a form of cryptographic hash function used to create unique signatures for a data file. In this instance, the SHA-256 hashing algorithm is assigning an almost-unique 256-bit (32-byte) signature for each block.
 
 \section{Initial Analysis}
-In my analysis of the application, I used the following processor and RAM:
+In my analysis of the application, I used the following processor:
 \begin{itemize}
 \item Intel Core i7-6700HQ @ 2.60GHz (4 cores, 8 threads)
-\item 8GB RAM (DDR4)
 \end{itemize}
 To analyse the performance and overall CPU usage of the blockchain application, I used the Visual Studio 2017 diagnostic tools - all within Release mode, x86. To start with, I ran the application to examine the overall performance, as well as any potential bottlenecks in the code. Unsurprisingly, the performance of the application hinges mainly on the 'difficulty' variable, which the programmer can control. After 5 runs, the application, with difficulty 5, mined 5 blocks in about 43 $\mypm$ 10 seconds. With difficulty 6, the application mined 5 blocks in about 382 $\mypm$ 30 seconds. \\
 As for bottlenecking, the application has a few instances of it. The most effective method of finding the bottleneck was to use Visual Studio's debugging tools, between a range of difficulties. The results after running the application with difficulty 6 was as follows: \\
