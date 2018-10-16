@@ -38,14 +38,14 @@ void block::mine_block(uint32_t difficulty) noexcept
 std::string block::calculate_hash() const noexcept
 {
     stringstream ss;
-    ss << _index << _time << _data << _nonce << prev_hash;
+	ss << _index << _time << _data << _nonce << prev_hash;		// String::append
     return sha256(ss.str());
 }
 
 block_chain::block_chain()
 {
     _chain.emplace_back(block(0, "Genesis Block"));
-    _difficulty = 6;
+    _difficulty = 1;
 }
 
 void block_chain::add_block(block &&new_block) noexcept
