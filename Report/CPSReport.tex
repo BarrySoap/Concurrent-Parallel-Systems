@@ -69,7 +69,7 @@ As it is called within the main while loop of calculate\_hash, this line seems t
     \centering
     \begin{tabular}{| l | l | l |}
     \hline
-    Difficulty & Iterations & \% increase from previous difficulty \%  \\ \hline
+    Difficulty & Iterations & \% increase from previous difficulty \\ \hline
     1 & 15,719 & N/A \\ \hline
     2 & 253,078 & 1,510\% \\ \hline
     3 & 3,989,869 & 1,476.5\% \\ \hline
@@ -97,7 +97,20 @@ The stringstream initialisation uses 20\% of the CPU resource, as opposed to the
 \section{Methodology}
 Due to its overall effect on the application, we can safely assume that editing/optimising the stringstream initialisation and hashing algorithm should improve the efficiency and speedup in multiple areas of the program. Parallelising the algorithm should be the most effective method of optimisation, and there are multiple string functions which are better suited, performance wise, than stringstreams - such as string::reserve and string::append. These functions can request a change in size to our hashcode, then append the necessary information respectively. \\
 To start with, it would be beneficial to make small changes to the way the program operates - there are superfluous print statements, some values can be placed in the header file(s), and some functions can be edited slightly. In order to measure the speedup and efficiency, I'll have to serialise the times of the mined blocks, and see if any noticable change in time occurs before and after the changes are made. To do this, the time value can be placed into a CSV file for each block, and we can use R to draw comparison between two datasets. We can do this for all methods of optimisation in the future. \\
+Next, we can use threads and OpenMP to parallelise the hashing algorithm, such that there are hashing processes running on 8 threads (relative to CPU) instead of running them sequentially. After examining the results of a successful or non-successful parallelisation, we must consider the other utilities offered from parallelisation. When creating threads for our parallisation, it may prove useful to use a mutex and atomics to ensure the consistency of our hashcodes. We can ensure that only one thread is operating within the hashcode generation/concatenation to avoid deadlock, and use atomic functions to make sure the hashcode isn't split during the process execution(s). Outside of the hashing algorithm, the application may benefit from parallel for loops as opposed to generic for/while loops. Since we either know or can approximate how many times a loop will run in this application, it would be a good idea to parallelise these processes. Likewise, we can use scheduling to divide work in our parallel loops - especially since we have a predetermined amount of blocks to mine. \\
+Once these features are in place, we can measure efficiency and speedup using a table similar to this,
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l | l |}
+    \hline
+    Feature & Time Before Implementation & Time After Implementation \\ \hline
+    string::append & x seconds & y seconds \\ \hline
+    Hashing Parallelisation & x seconds & y seconds \\ \hline
+    General Parallelisation & x seconds & y seconds \\ \hline
+    \end{tabular}
+    \caption{Optimisation Approaches}
+\end{table}
 
 \section{Results and Discussion}
 
