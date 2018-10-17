@@ -95,6 +95,9 @@ From this, we can safely say that each step in difficulty will have roughly the 
 The stringstream initialisation uses 20\% of the CPU resource, as opposed to the hashing function's 64\% - this is likely due to the amount of times the stringstream object is being initialised. Moving the object constructor out of this method would likely increase the program speedup somewhat. This is the main bottleneck of the application - no other function/method comes close to the amount of CPU resource that the hashing algorithm uses. 
 
 \section{Methodology}
+Due to its overall effect on the application, we can safely assume that editing/optimising the stringstream initialisation and hashing algorithm should improve the efficiency and speedup in multiple areas of the program. Parallelising the algorithm should be the most effective method of optimisation, and there are multiple string functions which are better suited, performance wise, than stringstreams - such as string::reserve and string::append. These functions can request a change in size to our hashcode, then append the necessary information respectively. \\
+To start with, it would be beneficial to make small changes to the way the program operates - there are superfluous print statements, some values can be placed in the header file(s), and some functions can be edited slightly. In order to measure the speedup and efficiency, I'll have to serialise the times of the mined blocks, and see if any noticable change in time occurs before and after the changes are made. To do this, the time value can be placed into a CSV file for each block, and we can use R to draw comparison between two datasets. We can do this for all methods of optimisation in the future. \\
+
 
 \section{Results and Discussion}
 
