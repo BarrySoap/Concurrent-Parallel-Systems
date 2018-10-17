@@ -78,13 +78,19 @@ As it is called within the main while loop of calculate\_hash, this line seems t
     \caption{Hashing Iterations}
 \end{table}
 
-From this, we can safely say that each step in difficulty will have roughly the same \% increase. Based on these exponential values, it is clear why a bottleneck occurs within this function. Using this \% increase, we can estimate a mining of 1000 blocks at difficulty 5 to have around 991,902,664 iterations. At difficulty 6, 15,637,345,497 iterations. Assuming this function can be ran multiple times concurrently, that theoretically should decrease execution time by a substantial amount - however, creating threads specifically for this function may be costly itself. Another line worth considering is the initialisation of the stringstream which is passed as a parameter to the hashing algorithm. As seen below, \\
+From this, we can safely say that each step in difficulty will have roughly the same \% increase. Based on these exponential values, it is clear why a bottleneck occurs within this function. Using this \% increase, we can estimate a mining of 1000 blocks at difficulty 5 to have around 991,902,664 iterations. At difficulty 6, 15,637,345,497 iterations. Assuming this function can be ran multiple times concurrently, that theoretically should decrease execution time by a substantial amount - however, creating threads specifically for this function may be costly itself. Another line worth considering is the initialisation of the stringstream which is passed as a parameter to the hashing algorithm. As seen below, the following CPU usage for each line can be seen, \\
 
-\begin{figure}[H]
-	\centering
-		\includegraphics[width=0.99\textwidth]{"stringstreamusage"}
-		\caption{stringstream Initialisation CPU Usage}
-\end{figure}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l |}
+    \hline
+    Function & CPU Usage \%  \\ \hline
+    stringstream initialisation & $\approx$ 1.82\% \\ \hline
+    stringstream concatenation & $\approx$ 20.00\% \\ \hline
+    sha256 hashing & $\approx$ 64.13\% \\ \hline
+    \end{tabular}
+    \caption{Individual Line CPU Usage}
+\end{table}
 
 The stringstream initialisation uses 20\% of the CPU resource, as opposed to the hashing function's 64\% - this is likely due to the amount of times the stringstream object is being initialised. Moving the object constructor out of this method would likely increase the program speedup somewhat. This is the main bottleneck of the application - no other function/method comes close to the amount of CPU resource that the hashing algorithm uses. 
 
