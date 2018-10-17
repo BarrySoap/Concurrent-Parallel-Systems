@@ -10,7 +10,7 @@ using namespace chrono;
 int main()
 {
     block_chain bchain;
-	bchain.results.open("CourseworkTest2.csv", ofstream::out);
+	bchain.results.open("CourseworkTotalTime.csv", ofstream::out);
 	bchain.results << "Individual Block Times" << "," << "Index" << endl;
 
 	auto start = system_clock::now();
