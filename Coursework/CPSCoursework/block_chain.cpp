@@ -5,6 +5,7 @@
 #include <sstream>
 #include <chrono>
 #include <fstream>
+#include <thread>
 
 using namespace std;
 using namespace std::chrono;
@@ -21,6 +22,8 @@ block::block(uint32_t index, const string &data)
 void block::mine_block(uint32_t difficulty, ofstream *results) noexcept
 {
     string str(difficulty, '0');
+	auto num_threads = thread::hardware_concurrency();
+	vector<thread> threads;
 	
     auto start = system_clock::now();
 
