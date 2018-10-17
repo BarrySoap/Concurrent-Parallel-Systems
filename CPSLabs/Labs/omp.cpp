@@ -148,7 +148,7 @@ int main(int argc, char **argv)
 	return 0;
 	/*************************************/
 
-	/* Example 3 - Bubble Sorting/Parallel Sorting /
+	/* Example 3 - Bubble Sorting/Parallel Sorting */
 	ofstream results("bubble.csv", ofstream::out);			// Create results file
 	//ofstream results("parallel.csv", ofstream::out);
 	for (size_t size = 8; size <= 16; ++size) {				// Gather results for 2^8 to 2^16 results

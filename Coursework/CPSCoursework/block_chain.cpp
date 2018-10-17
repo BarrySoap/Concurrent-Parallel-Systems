@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <chrono>
+#include <fstream>
 
 using namespace std;
 using namespace std::chrono;
@@ -31,6 +32,10 @@ void block::mine_block(uint32_t difficulty) noexcept
 
     auto end = system_clock::now();
     duration<double> diff = end - start;
+
+	ofstream results("CourseworkTest.csv", ofstream::out);
+	results << diff.count() << endl;
+	results.close();
 
     cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << endl;
 }
