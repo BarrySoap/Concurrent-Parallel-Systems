@@ -5,6 +5,7 @@
 #include "block_chain.h"
 
 using namespace std;
+using namespace chrono;
 
 int main()
 {
@@ -12,12 +13,16 @@ int main()
 	bchain.results.open("CourseworkTest.csv", ofstream::out);
 	bchain.results << "Individual Block Times" << endl;
 
+	auto start = system_clock::now();
     for (uint32_t i = 1; i < 10u; ++i)
     {
         bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")));
 		bchain.results << endl;
     }
+	auto end = system_clock::now();
 
+	duration<double> diff = end - start;
+	bchain.results << "Overall Time" << endl << diff.count() << endl;
 	bchain.results.close();
 
     return 0;
