@@ -14,7 +14,7 @@ int main()
 	bchain.results << "Individual Block Times" << "," << "Index" << endl;
 
 	auto start = system_clock::now();
-    for (uint32_t i = 1; i < 10u; ++i)
+    for (uint32_t i = 1; i < 15u; ++i)
     {
         bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")));
 		bchain.results << endl;
