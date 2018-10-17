@@ -188,7 +188,7 @@ int main(int argc, char **argv)
 	return 0;
 	/*************************************/
 
-	/* Example 5 - Task Scheduling */
+	/* Example 5 - Task Scheduling /
 	auto thread_count = thread::hardware_concurrency();		// Get number of hardware threads
 	auto n = static_cast<size_t>(pow(2, 14));				// Define number of iterations to calculate
 	auto sum = 0.0;											// Declare sum value

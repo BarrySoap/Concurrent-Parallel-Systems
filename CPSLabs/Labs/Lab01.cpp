@@ -178,7 +178,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 6 - CSV Serialisation /
+	/* Example 6 - CSV Serialisation */
 	ofstream data("data.csv", ofstream::out);		// Create a new file
 	for (int i = 0; i < 100; ++i) {					// We’re going to gather 100 readings, so create a thread and join it 100 times
 		auto start = system_clock::now();			// Get start time
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* EXTRA Example - Monte Carlo Pi Distributions using Futures/Promises */
+	/* EXTRA Example - Monte Carlo Pi Distributions using Futures/Promises /
 	ofstream data("montecarlo.csv", ofstream::out);					// Create data file
 
 	for (std::size_t num_threads = 0; num_threads <= 6; ++num_threads) {
@@ -255,4 +255,5 @@ int main(int argc, char **argv)
 	data.close();				// Close the file
 	return 0;
 	// ************************* //
+	*/
 }

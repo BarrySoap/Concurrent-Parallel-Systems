@@ -19,10 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="lab04.cpp" />
+    <ClCompile Include="omp.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="guarded.h" />
+    <ClInclude Include="Lab01.h" />
+    <ClInclude Include="Lab02.h" />
     <ClInclude Include="lab04.h" />
+    <ClInclude Include="omp.h" />
+    <ClInclude Include="threadsafe_stack.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
