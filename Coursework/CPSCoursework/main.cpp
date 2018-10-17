@@ -11,7 +11,7 @@ int main()
 {
     block_chain bchain;
 	bchain.results.open("CourseworkTest.csv", ofstream::out);
-	bchain.results << "Individual Block Times" << endl;
+	bchain.results << "Individual Block Times" << "," << "Index" << endl;
 
 	auto start = system_clock::now();
     for (uint32_t i = 1; i < 10u; ++i)
