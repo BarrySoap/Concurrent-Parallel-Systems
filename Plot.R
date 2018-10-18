@@ -16,10 +16,10 @@ print(data + data2)
 # gg1 + facet_wrap( ~ cut, ncol=3)
 
 testVarX <- CourseworkTest$Index
-testVarY <- as.numeric(as.character(CourseworkTest$Individual.Block.Times))
+testVarY <- as.numeric(as.character(CourseworkTest$Individual.Block.Times))   # Old
 
 testVarX2 <- CourseworkTest2$Index
-testVarY2 <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times))
+testVarY2 <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times)) # New
 
 testFrame <- data.frame(
   testVarX,
@@ -36,8 +36,8 @@ colnames(testFrame) = cols
 colnames(testFrame2) = cols
 
 p = ggplot() + 
-  geom_line(data = testFrame, aes(x = Index, y = Individual.Block.Times), color = "blue") +
-  geom_line(data = testFrame2, aes(x = Index, y = Individual.Block.Times), color = "red") +
+  geom_line(data = testFrame, aes(x = Index, y = Individual.Block.Times), color = "blue") + # Original Scripts
+  geom_line(data = testFrame2, aes(x = Index, y = Individual.Block.Times), color = "red") + # New Scripts
   xlab('Block Index') +
   ylab('Individual Block Times')
 
