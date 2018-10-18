@@ -2,18 +2,6 @@ library(ggplot2)
 data <- ggplot(CourseworkTest, aes(x=as.numeric(as.character(Individual.Block.Times)), y = Index)) + geom_point() + scale_x_continuous(limits = c(0.0, 0.2)) + labs(title="Block Mining Time", x="Time Taken", y="Block Index")
 data2 <- ggplot(CourseworkTest2, aes(x = Index, y=as.numeric(as.character(Individual.Block.Times)))) + geom_line() + scale_y_continuous(limits = c(0.0, 40.0)) + labs(title="Block Mining Time", x="Block Index", y="Time Taken")
 print(data)
-print(data + data2)
-
-# gg <- ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point() + labs(title="Scatterplot", x="Carat", y="Price")
-# 
-# gg1 <- gg + theme(plot.title=element_text(size=30, face="bold"), 
-#                   axis.text.x=element_text(size=15), 
-#                   axis.text.y=element_text(size=15),
-#                   axis.title.x=element_text(size=25),
-#                   axis.title.y=element_text(size=25)) + 
-#   scale_color_discrete(name="Cut of diamonds")  # add title and axis text, change legend title.
-# 
-# gg1 + facet_wrap( ~ cut, ncol=3)
 
 testVarX <- CourseworkTest$Index
 testVarY <- as.numeric(as.character(CourseworkTest$Individual.Block.Times))   # Old
@@ -36,15 +24,15 @@ colnames(testFrame) = cols
 colnames(testFrame2) = cols
 
 p = ggplot() + 
-  geom_line(data = testFrame, aes(x = Index, y = Individual.Block.Times), color = "blue") + # Original Scripts
-  geom_line(data = testFrame2, aes(x = Index, y = Individual.Block.Times), color = "red") + # New Scripts
+  geom_line(data = testFrame, aes(x = Index, y = Individual.Block.Times, color = "red")) + # Original Scripts
+  geom_line(data = testFrame2, aes(x = Index, y = Individual.Block.Times, color = "blue")) + # New Scripts
   xlab('Block Index') +
   ylab('Individual Block Times')
 
 print(p)
 
 # For linear regression and modeling #
-index <- as.numeric(as.character(1:999)) # time
+index <- as.numeric(as.character(1:99)) # time
 blockTimes <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times)) # temp
 
 # Generate first order linear model
@@ -65,6 +53,8 @@ pr.loess <- predict(ls)
 par(mfrow=c(2,2))
 plot(index, blockTimes, "l", las=1, xlab="Block Index", ylab="Individual Block Time") # Linear Regression
 lines(pr.lm~index, col="blue", lwd=2)
+legend(1, 1, legend=c("Line 1", "Line 2"),
+       col=c("red", "blue"), lty=1:2, cex=0.8)
 
 plot(index, blockTimes, "l", las=1, xlab="Block Index", ylab="Individual Block Time") # Linear Regression 2nd Pass
 lines(pr.lm2~index, col="green", lwd=2)
