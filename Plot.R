@@ -2,7 +2,7 @@ library(ggplot2)
 data <- ggplot(CourseworkTest, aes(x=as.numeric(as.character(Individual.Block.Times)), y = Index)) + geom_point() + scale_x_continuous(limits = c(0.0, 0.2)) + labs(title="Block Mining Time", x="Time Taken", y="Block Index")
 data2 <- ggplot(CourseworkTest2, aes(x = Index, y=as.numeric(as.character(Individual.Block.Times)))) + geom_line() + scale_y_continuous(limits = c(0.0, 40.0)) + labs(title="Block Mining Time", x="Block Index", y="Time Taken")
 print(data)
-print(data2)
+print(data + data2)
 
 # gg <- ggplot(diamonds, aes(x=carat, y=price, color=cut)) + geom_point() + labs(title="Scatterplot", x="Carat", y="Price")
 # 
@@ -15,6 +15,35 @@ print(data2)
 # 
 # gg1 + facet_wrap( ~ cut, ncol=3)
 
+testVarX <- CourseworkTest$Index
+testVarY <- as.numeric(as.character(CourseworkTest$Individual.Block.Times))
+
+testVarX2 <- CourseworkTest2$Index
+testVarY2 <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times))
+
+testFrame <- data.frame(
+  testVarX,
+  testVarY
+)
+
+testFrame2 <- data.frame(
+  testVarX2,
+  testVarY2
+)
+
+cols = c("Index", "Individual.Block.Times")
+colnames(testFrame) = cols
+colnames(testFrame2) = cols
+
+p = ggplot() + 
+  geom_line(data = testFrame, aes(x = Index, y = Individual.Block.Times), color = "blue") +
+  geom_line(data = testFrame2, aes(x = Index, y = Individual.Block.Times), color = "red") +
+  xlab('Block Index') +
+  ylab('Individual Block Times')
+
+print(p)
+
+# For linear regression and modeling #
 index <- as.numeric(as.character(1:999)) # time
 blockTimes <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times)) # temp
 
