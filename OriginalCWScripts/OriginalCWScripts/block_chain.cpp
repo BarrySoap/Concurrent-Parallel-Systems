@@ -17,7 +17,7 @@ block::block(uint32_t index, const string &data)
 {
 }
 
-void block::mine_block(uint32_t difficulty) noexcept
+void block::mine_block(uint32_t difficulty, ofstream *results, duration<double> &totalTime) noexcept
 {
     string str(difficulty, '0');
 
@@ -31,7 +31,8 @@ void block::mine_block(uint32_t difficulty) noexcept
 
     auto end = system_clock::now();
     duration<double> diff = end - start;
-
+	totalTime += diff;
+	*results << totalTime.count() << "," << _index;
     cout << "Block mined: " << _hash << " in " << diff.count() << " seconds" << endl;
 }
 
@@ -51,6 +52,6 @@ block_chain::block_chain()
 void block_chain::add_block(block &&new_block) noexcept
 {
     new_block.prev_hash = get_last_block().get_hash();
-    new_block.mine_block(_difficulty);
+    new_block.mine_block(_difficulty, &results, totalTime);
     _chain.push_back(new_block);
 }

@@ -10,11 +10,11 @@ using namespace chrono;
 int main()
 {
     block_chain bchain;
-	bchain.results.open("CourseworkTest.csv", ofstream::out);
+	bchain.results.open("CourseworkTest2.csv", ofstream::out);
 	bchain.results << "Individual Block Times" << "," << "Index" << endl;
 
 	auto start = system_clock::now();
-    for (uint32_t i = 1; i < 1000u; ++i)
+    for (uint32_t i = 1; i < 100u; ++i)
     {
         bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")));
 		bchain.results << endl;
