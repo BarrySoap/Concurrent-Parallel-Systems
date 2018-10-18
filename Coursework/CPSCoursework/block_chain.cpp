@@ -36,8 +36,7 @@ void block::mine_block(uint32_t difficulty, ofstream *results, duration<double> 
     auto end = system_clock::now();
     duration<double> diff = end - start;
 	totalTime += diff;
-	cout << totalTime.count() << endl;
-	*results << diff.count() << "," << _index;
+	*results << totalTime.count() << "," << _index;
     cout << "Block " << _index << " mined: " << _hash << " in " << diff.count() << " seconds" << endl;
 }
 

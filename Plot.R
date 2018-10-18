@@ -1,6 +1,6 @@
 library(ggplot2)
 data <- ggplot(CourseworkTest, aes(x=as.numeric(as.character(Individual.Block.Times)), y = Index)) + geom_point() + scale_x_continuous(limits = c(0.0, 0.2)) + labs(title="Block Mining Time", x="Time Taken", y="Block Index")
-data2 <- ggplot(CourseworkTest2, aes(x = Index, y=as.numeric(as.character(Individual.Block.Times)))) + geom_line() + scale_y_continuous(limits = c(0.0, 0.08)) + labs(title="Block Mining Time", x="Block Index", y="Time Taken")
+data2 <- ggplot(CourseworkTest2, aes(x = Index, y=as.numeric(as.character(Individual.Block.Times)))) + geom_line() + scale_y_continuous(limits = c(0.0, 40.0)) + labs(title="Block Mining Time", x="Block Index", y="Time Taken")
 print(data)
 print(data2)
 
