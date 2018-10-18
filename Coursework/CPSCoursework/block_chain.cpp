@@ -22,8 +22,8 @@ block::block(uint32_t index, const string &data)
 void block::mine_block(uint32_t difficulty, ofstream *results, duration<double> &totalTime) noexcept
 {
     string str(difficulty, '0');
-	auto num_threads = thread::hardware_concurrency();
-	vector<thread> threads;
+	/*auto num_threads = thread::hardware_concurrency();
+	vector<thread> threads;*/
 	
     auto start = system_clock::now();
 
