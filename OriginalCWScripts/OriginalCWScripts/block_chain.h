@@ -45,6 +45,6 @@ private:
 public:
 	block_chain();
 	std::ofstream results;
-	void add_block(block &&new_block) noexcept;
+	void add_block(block &&new_block, uint32_t difficulty) noexcept;
 	std::chrono::duration<double> totalTime;
 };

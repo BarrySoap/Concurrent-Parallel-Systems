@@ -3,10 +3,10 @@ data <- ggplot(CourseworkTest, aes(x=as.numeric(as.character(Individual.Block.Ti
 data2 <- ggplot(CourseworkTest2, aes(x = Index, y=as.numeric(as.character(Individual.Block.Times)))) + geom_line() + scale_y_continuous(limits = c(0.0, 40.0)) + labs(title="Block Mining Time", x="Block Index", y="Time Taken")
 print(data)
 
-testVarX <- CourseworkTest$Index
+testVarX <- CourseworkTest$Difficulty
 testVarY <- as.numeric(as.character(CourseworkTest$Individual.Block.Times))   # Old
 
-testVarX2 <- CourseworkTest2$Index
+testVarX2 <- CourseworkTest2$Difficulty
 testVarY2 <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times)) # New
 
 testFrame <- data.frame(
@@ -19,15 +19,17 @@ testFrame2 <- data.frame(
   testVarY2
 )
 
-cols = c("Index", "Individual.Block.Times")
+cols = c("Difficulty", "Individual.Block.Times")
 colnames(testFrame) = cols
 colnames(testFrame2) = cols
 
 p = ggplot() + 
-  geom_line(data = testFrame, aes(x = Index, y = Individual.Block.Times, color = "red")) + # Original Scripts
-  geom_line(data = testFrame2, aes(x = Index, y = Individual.Block.Times, color = "blue")) + # New Scripts
-  xlab('Block Index') +
-  ylab('Individual Block Times')
+  geom_line(data = testFrame, aes(x = Difficulty, y = Individual.Block.Times, color = "red")) + # Original Scripts
+  geom_line(data = testFrame2, aes(x = Difficulty, y = Individual.Block.Times, color = "blue")) + # New Scripts
+  xlab('Block Difficulty') +
+  xlim(1, 4) +
+  ylab('Individual Block Times') +
+  scale_y_continuous(trans='log10')
 
 print(p)
 
