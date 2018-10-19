@@ -26,7 +26,7 @@ public:
 
     // Difficulty is the minimum number of zeros we require at the
     // start of the hash.
-    void mine_block(uint32_t difficulty, std::ofstream *results, std::chrono::duration<double> &totalTime) noexcept;
+    void mine_block(uint32_t difficulty) noexcept;
 
     inline const std::string& get_hash() const noexcept { return _hash; }
 
@@ -46,5 +46,4 @@ public:
     block_chain();
 	std::ofstream results;
 	void add_block(block &&new_block, uint32_t difficulty) noexcept;
-	std::chrono::duration<double> totalTime;
 };

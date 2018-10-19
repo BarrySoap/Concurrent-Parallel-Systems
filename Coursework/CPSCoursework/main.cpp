@@ -10,22 +10,23 @@ using namespace chrono;
 int main()
 {
     block_chain bchain;
+	duration<double> totalTime;
 	bchain.results.open("CourseworkTest2.csv", ofstream::out);
-	bchain.results << "Individual Block Times" << "," << "Difficulty" << endl;
+	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
-	auto start = system_clock::now();
-	for (uint32_t difficulty = 1; difficulty < 5; difficulty++)
+	for (uint32_t difficulty = 1; difficulty < 6; difficulty++)
 	{
+		auto start = system_clock::now();
 		for (uint32_t i = 1; i < 100u; ++i)
 		{
 			bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")), difficulty);
-			bchain.results << endl;
 		}
-	}
-	auto end = system_clock::now();
+		auto end = system_clock::now();
 
-	duration<double> diff = end - start;
-	bchain.results << "Overall Time" << endl << diff.count() << endl;
+		duration<double> diff = (end - start) / 100;
+		bchain.results << diff.count() << "," << difficulty << endl;
+	}
+	
 	bchain.results.close();
 
     return 0;

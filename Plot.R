@@ -29,7 +29,7 @@ p = ggplot() +
   xlab('Block Difficulty') +
   xlim(1, 4) +
   ylab('Individual Block Times') +
-  scale_y_continuous(trans='log10')
+  scale_y_continuous(trans='log2')
 
 print(p)
 
