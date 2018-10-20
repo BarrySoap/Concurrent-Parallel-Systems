@@ -99,13 +99,13 @@ void new_monte_carlo_pi(size_t iterations, promise<double> pi)
 
 int main(int argc, char **argv)
 {
-	/* Example 1 - Thread Creation / 
+	/* Example 1 - Thread Creation */ 
 	thread t(hello_world);		// Create a new thread
 	t.join();					// Wait for thread to finish (join it)
 	return 0;					// Return 0 (OK)
 	// ************************* //
 
-	/* Example 2 - Thread Sleeping /
+	/* Example 2 - Thread Sleeping */
 	cout << "Starting task one" << endl;
 	thread t1(task_one);
 	cout << "Starting task two" << endl;
@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 3 - Giving Threads Parameters /
+	/* Example 3 - Giving Threads Parameters */
 	std::random_device r;				// Create a random, seed with real random number if available
 	default_random_engine e(r());		// Create random number generator
 
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 4 - Lambda Expressions /
+	/* Example 4 - Lambda Expressions */
 	auto add = [](int x, int y) { return x + y; };		// Create lambda expression
 	auto x = add(10, 12);								// Call the defined function
 	cout << "10 + 12 = " << x << endl;					// Display answer - should be 22
@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 5 - Thread Creation using Lambda Expressions /
+	/* Example 5 - Thread Creation using Lambda Expressions */
 	thread t([] { cout << "Hello from lambda thread!" << endl; });		// Create a thread using a lambda expression
 	t.join();			// Join thread
 	
@@ -193,7 +193,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 7 - Monte Carlo Pi Distributions /
+	/* Example 7 - Monte Carlo Pi Distributions */
 	ofstream data("montecarlo.csv", ofstream::out);					// Create data file
 
 	for (std::size_t num_threads = 0; num_threads <= 6; ++num_threads) {
@@ -220,7 +220,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* EXTRA Example - Monte Carlo Pi Distributions using Futures/Promises /
+	/* EXTRA Example - Monte Carlo Pi Distributions using Futures/Promises */
 	ofstream data("montecarlo.csv", ofstream::out);					// Create data file
 
 	for (std::size_t num_threads = 0; num_threads <= 6; ++num_threads) {
@@ -255,5 +255,4 @@ int main(int argc, char **argv)
 	data.close();				// Close the file
 	return 0;
 	// ************************* //
-	*/
 }
