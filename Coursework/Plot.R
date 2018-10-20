@@ -51,7 +51,7 @@ p = ggplot() +
   geom_line(data = multiThreadingFrame, aes(x = Difficulty, y = Average.Block.Time, color = "green")) +
   geom_line(data = openMPFrame, aes(x = Difficulty, y = Average.Block.Time, color = "purple")) +
   geom_line(data = CPUInstructionsFrame, aes(x = Difficulty, y = Average.Block.Time, color = "grey")) +
-  scale_color_manual(labels = c("Original Scripts", "Thread Pool", "Multi Threading", "OpenMP", "CPU Instrucions"), values = c("blue", "red", "green", "purple", "grey")) +
+  scale_color_manual(labels = c("Thread Pool", "Original Scripts", "Multi Threading", "OpenMP", "CPU Instrucions"), values = c("blue", "red", "green", "purple", "grey")) +
   xlab('Block Difficulty') +
   ylab('Average Block Times') +
   scale_y_continuous(trans='log2')
