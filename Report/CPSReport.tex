@@ -7,7 +7,7 @@
 \usepackage{float}
 \usepackage[english]{babel}
 \usepackage[top=1.0in, bottom=1.0in, left=1.0in, right=1.0in]{geometry}
-\graphicspath{{../Images/}}
+\graphicspath{{Images/}}
 \linespread{1.25}
 
 \title{\vspace{-3cm}Concurrent \& Parallel Systems - Coursework 1 Report}
@@ -114,7 +114,7 @@ Once these features are in place, we can measure efficiency and speedup using a 
 \end{table}
 
 \section{Results and Discussion}
-In order to examine the speedup and efficiency for the application, there had to be some way to compare the mining time for different methodologies. With that in mind, there had to be separate Visual Studio projects with both the original scripts and the updated scripts. However, both of these had to have functions which serialised the average time to mine blocks, as well as the difficulty. This can then be visualised and examined with a simple R script, which simply reads in the data, transforms it into a data frame and plots it using the ggplot2 package. Any results seen in this section won't be influenced by background processes or other programs - these were closed/stopped. 
+In order to examine the speedup and efficiency for the application, there had to be some way to compare the mining time for different methodologies. With that in mind, there had to be separate Visual Studio projects with the original scripts, and every methodology used for this project. However, all of these projects had to have functions which serialised the average time to mine blocks, as well as the difficulty. This can then be visualised and examined with a simple R script, which simply reads in the data, transforms it into a data frame and plots it using the ggplot2 package. Any results seen in this section won't be influenced by background processes or other programs - these were closed/stopped.
 
 \section{Conclusion}
 

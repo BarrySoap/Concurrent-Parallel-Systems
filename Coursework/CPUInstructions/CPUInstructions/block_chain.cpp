@@ -22,8 +22,6 @@ block::block(uint32_t index, const string &data)
 void block::mine_block(uint32_t difficulty) noexcept
 {
     string str(difficulty, '0');
-	/*auto num_threads = thread::hardware_concurrency();
-	vector<thread> threads;*/
 	
     auto start = system_clock::now();
 
@@ -40,10 +38,6 @@ void block::mine_block(uint32_t difficulty) noexcept
 
 std::string block::calculate_hash() const noexcept
 {
-    /*stringstream ss;
-	ss << _index << _time << _data << _nonce << prev_hash;
-    return sha256(ss.str());*/
-
 	string ss;
 	ss.append(to_string(_index));
 	ss.append(to_string(_time));

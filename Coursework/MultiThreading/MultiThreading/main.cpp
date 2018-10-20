@@ -11,10 +11,10 @@ int main()
 {
     block_chain bchain;
 	duration<double> totalTime;
-	bchain.results.open("CourseworkTestTotal.csv", ofstream::out);
+	bchain.results.open("MultiThreading.csv", ofstream::out);
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
-	for (uint32_t difficulty = 1; difficulty < 4; difficulty++)
+	for (uint32_t difficulty = 1; difficulty < 5; difficulty++)
 	{
 		auto start = system_clock::now();
 		for (uint32_t i = 1; i < 100u; ++i)
