@@ -11,7 +11,7 @@ int main()
 {
     block_chain bchain;
 	duration<double> totalTime;
-	bchain.results.open("CourseworkTest2.csv", ofstream::out);
+	bchain.results.open("CourseworkTestTotal.csv", ofstream::out);
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
 	for (uint32_t difficulty = 1; difficulty < 5; difficulty++)

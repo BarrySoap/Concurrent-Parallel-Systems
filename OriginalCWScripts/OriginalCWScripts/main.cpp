@@ -10,7 +10,7 @@ using namespace chrono;
 int main()
 {
 	block_chain bchain;
-	bchain.results.open("CourseworkTest.csv", ofstream::out);
+	bchain.results.open("CourseworkTestOriginal.csv", ofstream::out);
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 	for (uint32_t difficulty = 1; difficulty < 5; difficulty++)
 	{
