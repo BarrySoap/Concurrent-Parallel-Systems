@@ -88,6 +88,7 @@ From this, we can safely say that each step in difficulty will have roughly the 
     stringstream initialisation & $\approx$ 1.82\% \\ \hline
     stringstream concatenation & $\approx$ 20.00\% \\ \hline
     sha256 hashing & $\approx$ 64.13\% \\ \hline
+    Other/Tertiary Processes & $\approx$ 10 - 14\% \\ \hline
     \end{tabular}
     \caption{Individual Line CPU Usage}
 \end{table}
@@ -113,6 +114,7 @@ Once these features are in place, we can measure efficiency and speedup using a 
 \end{table}
 
 \section{Results and Discussion}
+In order to examine the speedup and efficiency for the application, there had to be some way to compare the mining time for different methodologies. With that in mind, there had to be separate Visual Studio projects with both the original scripts and the updated scripts. However, both of these had to have functions which serialised the average time to mine blocks, as well as the difficulty. This can then be visualised and examined with a simple R script, which simply reads in the data, transforms it into a data frame and plots it using the ggplot2 package. Any results seen in this section won't be influenced by background processes or other programs - these were closed/stopped. 
 
 \section{Conclusion}
 
