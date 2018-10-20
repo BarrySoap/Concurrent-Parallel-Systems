@@ -31,6 +31,7 @@ p = ggplot() +
   geom_line(data = newScriptsFrame, aes(x = Difficulty, y = Average.Block.Time, color = "red")) +
   geom_line(data = originalScriptsFrame, aes(x = Difficulty, y = Average.Block.Time, color = "blue")) +
   geom_line(data = newFrame, aes(x = Difficulty, y = Average.Block.Time, color = "green")) +
+  scale_color_manual(labels = c("Original Scripts", "New Scripts", "Test"), values = c("blue", "red", "green")) +
   xlab('Block Difficulty') +
   xlim(1, 4) +
   ylab('Average Block Times') +
