@@ -14,7 +14,7 @@ int main()
 	bchain.results.open("CourseworkTest2.csv", ofstream::out);
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
-	for (uint32_t difficulty = 1; difficulty < 6; difficulty++)
+	for (uint32_t difficulty = 1; difficulty < 5; difficulty++)
 	{
 		auto start = system_clock::now();
 		for (uint32_t i = 1; i < 100u; ++i)

@@ -4,10 +4,10 @@ data2 <- ggplot(CourseworkTest2, aes(x = Index, y=as.numeric(as.character(Indivi
 print(data)
 
 testVarX <- CourseworkTest$Difficulty
-testVarY <- as.numeric(as.character(CourseworkTest$Individual.Block.Times))   # Old
+testVarY <- as.numeric(as.character(CourseworkTest$Average.Block.Time))   # Old
 
 testVarX2 <- CourseworkTest2$Difficulty
-testVarY2 <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times)) # New
+testVarY2 <- as.numeric(as.character(CourseworkTest2$Average.Block.Time)) # New
 
 testFrame <- data.frame(
   testVarX,
@@ -19,23 +19,27 @@ testFrame2 <- data.frame(
   testVarY2
 )
 
-cols = c("Difficulty", "Individual.Block.Times")
+cols = c("Difficulty", "Average.Block.Time")
 colnames(testFrame) = cols
 colnames(testFrame2) = cols
 
 p = ggplot() + 
-  geom_line(data = testFrame, aes(x = Difficulty, y = Individual.Block.Times, color = "red")) + # Original Scripts
-  geom_line(data = testFrame2, aes(x = Difficulty, y = Individual.Block.Times, color = "blue")) + # New Scripts
+  geom_line(data = testFrame, aes(x = Difficulty, y = Average.Block.Time, color = "red")) + # Original Scripts
+  geom_line(data = testFrame2, aes(x = Difficulty, y = Average.Block.Time, color = "blue")) + # New Scripts
   xlab('Block Difficulty') +
   xlim(1, 4) +
-  ylab('Individual Block Times') +
+  ylab('Average Block Times') +
   scale_y_continuous(trans='log2')
 
 print(p)
 
+
+
+
+
 # For linear regression and modeling #
 index <- as.numeric(as.character(1:99)) # time
-blockTimes <- as.numeric(as.character(CourseworkTest2$Individual.Block.Times)) # temp
+blockTimes <- as.numeric(as.character(CourseworkTest2$Average.Block.Time)) # temp
 
 # Generate first order linear model
 lin.mod <- lm(blockTimes~index)
