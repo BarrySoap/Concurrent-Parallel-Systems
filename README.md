@@ -3,4 +3,6 @@ Work enclosed within this repository is related to Edinburgh Napier module, Conc
 
 Coursework Files: CPSCoursework and Program Runs folders.
 
-How to Run: TBC 
+How to Run: 
+* Install latest version of Visual Studio
+* 
