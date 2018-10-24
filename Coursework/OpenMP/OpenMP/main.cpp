@@ -2,6 +2,7 @@
 #include <string>
 #include <chrono>
 #include <fstream>
+#include <thread>
 #include "block_chain.h"
 
 using namespace std;
@@ -14,9 +15,11 @@ int main()
 	bchain.results.open("OpenMP.csv", ofstream::out);
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
+#pragma omp for
 	for (uint32_t difficulty = 1; difficulty < 5; difficulty++)
 	{
 		auto start = system_clock::now();
+#pragma omp for
 		for (uint32_t i = 1; i < 100u; ++i)
 		{
 			bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")), difficulty);

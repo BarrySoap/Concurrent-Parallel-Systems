@@ -114,7 +114,7 @@ double f(unsigned int i)							// Let's create a function that relies on i to de
 
 int main(int argc, char **argv)
 {
-	/* Example 1 - Hello World Threading /
+	/* Example 1 - Hello World Threading */
 	// Run hello THREADS times
 #pragma omp parallel num_threads(THREADS)
 	hello();

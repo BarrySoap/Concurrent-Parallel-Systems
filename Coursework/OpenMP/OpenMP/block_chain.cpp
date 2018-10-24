@@ -6,9 +6,13 @@
 #include <chrono>
 #include <fstream>
 #include <thread>
+#include <omp.h>
 
 using namespace std;
 using namespace std::chrono;
+
+auto num_threads = thread::hardware_concurrency();
+auto thread_count = omp_get_num_threads();
 
 // Note that _time would normally be set to the time of the block's creation.
 // This is part of the audit a block chain.  To enable consistent results
@@ -25,6 +29,7 @@ void block::mine_block(uint32_t difficulty) noexcept
 	
     auto start = system_clock::now();
 
+#pragma omp parallel num_threads(THREADS)
     while (_hash.substr(0, difficulty) != str)
     {
         ++_nonce;
