@@ -45,6 +45,8 @@ colnames(multiThreadingFrame) = cols
 colnames(openMPFrame) = cols
 colnames(CPUInstructionsFrame) = cols
 
+library(ggplot2)
+
 p = ggplot() + 
   geom_line(data = originalFrame, aes(x = Difficulty, y = Average.Block.Time, color = "red")) +
   geom_line(data = threadPoolFrame, aes(x = Difficulty, y = Average.Block.Time, color = "blue")) +
