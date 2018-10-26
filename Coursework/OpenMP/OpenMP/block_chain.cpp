@@ -29,15 +29,16 @@ void block::mine_block(uint32_t difficulty) noexcept
 
 	auto start = system_clock::now();
 
-#pragma omp parallel num_threads(8) default(none)
+#pragma omp parallel num_threads(8) default(none) shared(difficulty, str, cout)
+	while (true)
 	{
-#pragma omp single
+		if (_hash.substr(0, difficulty) != str)
 		{
-			while (_hash.substr(0, difficulty) != str)
-			{
-				++_nonce;
-				_hash = calculate_hash();
-			}
+			++_nonce;
+			_hash = calculate_hash();
+		}
+		else {
+			break;
 		}
 	}
 

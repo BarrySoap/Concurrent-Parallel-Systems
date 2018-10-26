@@ -56,6 +56,6 @@ p = ggplot() +
   scale_color_manual(labels = c("Thread Pool", "Original Scripts", "Multi Threading", "OpenMP", "CPU Instrucions"), values = c("blue", "red", "green", "purple", "grey")) +
   xlab('Block Difficulty') +
   ylab('Average Block Times') +
-  scale_y_continuous(trans='log2')
+  scale_y_continuous(trans='log10')
 
 print(p)

@@ -160,7 +160,8 @@ std::string sha256(const std::string &input)
     ctx.final(digest);
     char buf[2 * SHA256::DIGEST_SIZE + 1];
     buf[2 * SHA256::DIGEST_SIZE] = 0;
-    for (size_t i = 0; i < SHA256::DIGEST_SIZE; ++i)
+#pragma omp parallel num_threads(8) default(none) shared(buf, digest)
+    for (int i = 0; i < SHA256::DIGEST_SIZE; ++i)
         sprintf(buf + i * 2, "%02x", digest[i]);
     return std::string(buf);
 }
