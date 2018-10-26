@@ -122,7 +122,23 @@ In order to examine the speedup and efficiency for the application, there had to
 		\caption{Average Block Mining Time Between Methods}
 \end{figure}
 
-To start with, we must examine the thread pool method. This entails 
+To start with, we must examine the multithreading method. This entails creating n amount of threads, relative to the CPU, and having the threads work on facets of the application in parallel. In order to achieve this, we have to replace a costly, sequential function with a purely threaded method of execution - the chosen function to replace was the calculate hash function. As mentioned previously, this can be called millions, possibly even billions of times at higher difficulties. Having a threaded method to execute this would speed up the application considerably. Upon replacing the function, the following results were found:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l | l | l |}
+    \hline
+    Difficulty & Time Taken (Sequential) & Time Taken (Threaded) & Speedup\\ \hline
+    1 & 0.222963 seconds & 0.743006 seconds & N/A\\ \hline
+    2 & 0.444432 seconds & 0.751788 seconds & N/A\\ \hline
+    3 & 4.66663 seconds & 1.80038 seconds & 2.59202\\ \hline
+    4 & 57.9695 seconds & 15.6473 seconds & 3.70476\\ \hline
+    5 & 933.004 seconds & 207.502 seconds & 4.49636\\ \hline
+    \end{tabular}
+    \caption{Performance Difference (Sequential vs. Threaded}
+\end{table}
+
+From this table, we can see a 4.4 total speedup in favour of the multithreading technique, with an efficiency of 0.999987.
 
 \section{Conclusion}
 
