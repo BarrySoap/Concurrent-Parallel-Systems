@@ -114,7 +114,15 @@ Once these features are in place, we can measure efficiency and speedup using a 
 \end{table}
 
 \section{Results and Discussion}
-In order to examine the speedup and efficiency for the application, there had to be some way to compare the mining time for different methodologies. With that in mind, there had to be separate Visual Studio projects with the original scripts, and every methodology used for this project. However, all of these projects had to have functions which serialised the average time to mine blocks, as well as the difficulty. This can then be visualised and examined with a simple R script, which simply reads in the data, transforms it into a data frame and plots it using the ggplot2 package. Any results seen in this section won't be influenced by background processes or other programs - these were closed/stopped.
+In order to examine the speedup and efficiency for the application, there had to be some way to compare the mining time for different methodologies. With that in mind, there had to be separate Visual Studio projects with the original scripts, and every methodology used for this project. However, all of these projects had to have functions which serialised the average time to mine blocks, as well as the difficulty. This can then be visualised and examined with a simple R script, which simply reads in the data, transforms it into a data frame and plots it using the ggplot2 package. Any results seen in this section won't be influenced by background processes or other programs - these were closed/stopped. To examine the application, the methods used were: thread pools, multithreading and OpenMP. The average speed for a block to be mined was compared against the speed of the original scripts, which produced the following graph: \\
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.75\textwidth]{"Placeholder"}
+		\caption{Average Block Mining Time Between Methods}
+\end{figure}
+
+
 
 \section{Conclusion}
 

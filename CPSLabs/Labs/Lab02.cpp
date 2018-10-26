@@ -273,7 +273,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 7 - Futures /
+	/* Example 7 - Futures */
 	auto num_threads = thread::hardware_concurrency();					// Get the number of supported threads
 
 	vector<unsigned int> values;										// Create a vector with 2^24 random values
@@ -303,7 +303,7 @@ int main(int argc, char **argv)
 	return 0;
 	// ************************* //
 
-	/* Example 8 - Mandelbrot Fractals */
+	/* Example 8 - Mandelbrot Fractals /
 	auto num_threads = thread::hardware_concurrency();		// Get the number of supported threads
 
 	size_t strip_height = dim / num_threads;				// Determine strip height
@@ -320,4 +320,4 @@ int main(int argc, char **argv)
 
 	return 0;
 	// ************************* //
-}
+}*/

@@ -6,6 +6,8 @@
 #include <chrono>
 #include <fstream>
 #include <thread>
+#include <atomic>
+#include <mutex>
 
 using namespace std;
 using namespace std::chrono;
@@ -17,6 +19,7 @@ using namespace std::chrono;
 block::block(uint32_t index, const string &data)
 : _index(index), _data(data), _nonce(0), _time(static_cast<long>(index))
 {
+	_nonce = make_shared<atomic<uint64_t>>(0);
 }
 
 void block::mine_block(uint32_t difficulty) noexcept
@@ -27,7 +30,7 @@ void block::mine_block(uint32_t difficulty) noexcept
 
     while (_hash.substr(0, difficulty) != str)
     {
-        ++_nonce;
+        ++*_nonce;
         _hash = calculate_hash();
     }
 
@@ -42,7 +45,7 @@ std::string block::calculate_hash() const noexcept
 	ss.append(to_string(_index));
 	ss.append(to_string(_time));
 	ss.append(_data);
-	ss.append(to_string(_nonce));
+	ss.append(to_string(*_nonce));
 	ss.append(prev_hash);
 	return sha256(ss);
 }

@@ -16,7 +16,7 @@ int main()
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
 #pragma omp parallel for num_threads(8) default(none)
-	for (int difficulty = 1; difficulty < 4; difficulty++)
+	for (int difficulty = 1; difficulty < 6; difficulty++)
 	{
 		auto start = system_clock::now();
 		for (int i = 1; i < 100u; ++i)
