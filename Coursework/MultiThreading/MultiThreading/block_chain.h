@@ -21,7 +21,7 @@ private:
 
 	void calculate_hash(uint32_t difficulty) noexcept;
 	// Flag for comparing hash to string.
-	bool flag = false;
+	bool finalHash = false;
 public:
 	block(uint32_t index, const std::string &data);
 
@@ -44,6 +44,7 @@ private:
 
 public:
 	block_chain();
+	// Results file for storing average block time and difficulty.
 	std::ofstream results;
 	void add_block(block &&new_block, uint32_t difficulty) noexcept;
 };

@@ -44,6 +44,7 @@ private:
 
 public:
 	block_chain();
+	// Results file for storing average block time and difficulty.
 	std::ofstream results;
 	void add_block(block &&new_block, uint32_t difficulty) noexcept;
 };

@@ -21,16 +21,22 @@ block::block(uint32_t index, const string &data)
 
 void block::mine_block(uint32_t difficulty) noexcept
 {
+	// Get the available threads relative to the processor.
 	auto num_threads = thread::hardware_concurrency();
 	vector<thread> threads;
 
 	auto start = system_clock::now();
 
+	// For the amount of threads we have available,
 	for (unsigned int i = 0; i < num_threads; ++i)
 	{
+		// Push a thread task to the list of threads, in which
+		// the current block and difficulty are passed to the
+		// hash calculation function.
 		threads.push_back(thread(&block::calculate_hash, this, difficulty));
 	}
 
+	// Join the threads available in our list of threads.
 	for (auto &t : threads)
 	{
 		t.join();
@@ -43,17 +49,25 @@ void block::mine_block(uint32_t difficulty) noexcept
 
 void block::calculate_hash(uint32_t difficulty) noexcept
 {
+	// Initialise a string relative to our difficulty value:
+	// Difficulty 2: "00"
+	// Difficulty 5: "00000"
 	string str(difficulty, '0');
 
-	while (flag != true)
+	// If the hash hasn't been solved yet,
+	while (finalHash != true)
 	{
+		// Create our string,
 		stringstream ss;
 		ss << _index << _time << _data << ++_nonce << prev_hash;
 
+		// Then run it through the hashing algorithm.
 		string newHash = sha256(ss.str());
+		// If the new string is the correct hash,
 		if (newHash.substr(0, difficulty) == str)
 		{
-			flag = true;
+			// The hash has been solved.
+			finalHash = true;
 			_hash = newHash;
 		}
 	}
@@ -61,11 +75,13 @@ void block::calculate_hash(uint32_t difficulty) noexcept
 
 block_chain::block_chain()
 {
+	// Instead of declaring difficulty here,
 	_chain.emplace_back(block(0, "Genesis Block"));
 }
 
 void block_chain::add_block(block &&new_block, uint32_t difficulty) noexcept
 {
+	// Let main pass it as a parameter for easier serialisation.
 	new_block.prev_hash = get_last_block().get_hash();
 	new_block.mine_block(difficulty);
 	_chain.push_back(new_block);

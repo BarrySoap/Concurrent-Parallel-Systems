@@ -11,10 +11,14 @@ using namespace chrono;
 int main()
 {
     block_chain bchain;
-	duration<double> totalTime;
+	// Open a file in the root folder,
 	bchain.results.open("OpenMP.csv", ofstream::out);
+	// And add the headings for average block time and difficulty.
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
+	// If uncommented, this line will attempt to run multiple difficulties at once.
+	// Unfortunately, there is an issue which stems from the previous_hash
+	// dependence, which causes heap corruption issues.
 //#pragma omp parallel for num_threads(8) default(none)
 	for (int difficulty = 1; difficulty < 6; difficulty++)
 	{

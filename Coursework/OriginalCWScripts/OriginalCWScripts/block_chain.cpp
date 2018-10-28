@@ -43,11 +43,13 @@ std::string block::calculate_hash() const noexcept
 
 block_chain::block_chain()
 {
+	// Instead of declaring difficulty here,
     _chain.emplace_back(block(0, "Genesis Block"));
 }
 
 void block_chain::add_block(block &&new_block, uint32_t difficulty) noexcept
 {
+	// Let main pass it as a parameter for easier serialisation.
     new_block.prev_hash = get_last_block().get_hash();
     new_block.mine_block(difficulty);
     _chain.push_back(new_block);
