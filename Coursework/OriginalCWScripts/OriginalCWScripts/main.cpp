@@ -12,7 +12,7 @@ int main()
 	block_chain bchain;
 	bchain.results.open("CourseworkTestOriginal.csv", ofstream::out);
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
-	for (uint32_t difficulty = 1; difficulty < 5; difficulty++)
+	for (uint32_t difficulty = 1; difficulty < 6; difficulty++)
 	{
 		auto start = system_clock::now();
 		for (uint32_t i = 1; i < 100u; ++i)
@@ -22,7 +22,7 @@ int main()
 		}
 		auto end = system_clock::now();
 
-		duration<double> diff = (end - start) / 100;
+		duration<double> diff = end - start;
 		bchain.results << diff.count() << "," << difficulty << endl;
 	}
 	bchain.results.close();

@@ -118,9 +118,10 @@ In order to examine the speedup and efficiency for the application, there had to
 
 \begin{figure}[H]
 	\centering
-		\includegraphics[width=0.75\textwidth]{"Placeholder"}
+		\includegraphics[width=0.8\textwidth]{"Times"}
 		\caption{Average Block Mining Time Between Methods}
 \end{figure}
+From figure 2, we can see that all methods are somewhat equal in their cumulative time for the lower difficulties, but OpenMP and multithreading will take a bit longer as they both have to initialise threads in the code. However, further down the line this pays off for only multithreading. We will examine this more throughly: \\
 
 To start with, we must examine the multithreading method. This entails creating n amount of threads, relative to the CPU, and having the threads work on facets of the application in parallel. In order to achieve this, we have to replace a costly, sequential function with a purely threaded method of execution - the chosen function to replace was the calculate hash function. As mentioned previously, this can be called millions, possibly even billions of times at higher difficulties. Having a threaded method to execute this would speed up the application considerably. Upon replacing the function, the following results were found:
 

@@ -15,7 +15,7 @@ int main()
 	bchain.results.open("OpenMP.csv", ofstream::out);
 	bchain.results << "Average Block Time" << "," << "Difficulty" << endl;
 
-#pragma omp parallel for num_threads(8) default(none)
+//#pragma omp parallel for num_threads(8) default(none)
 	for (int difficulty = 1; difficulty < 6; difficulty++)
 	{
 		auto start = system_clock::now();
@@ -24,7 +24,7 @@ int main()
 			bchain.add_block(block(i, string("Block ") + to_string(i) + string(" Data")), difficulty);
 		}
 		auto end = system_clock::now();
-		duration<double> diff = (end - start) / 100;
+		duration<double> diff = end - start;
 		bchain.results << diff.count() << "," << difficulty << endl;
 	}
 	
