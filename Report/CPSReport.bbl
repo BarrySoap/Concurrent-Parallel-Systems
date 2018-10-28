@@ -1,0 +1,19 @@
+\begin{thebibliography}{}
+
+\bibitem[Bull, ]{1}
+Bull, M.
+\newblock Openmp tips, tricks and gotchas.
+\newblock Useful presentation explaining some OpenMP operations.
+
+\bibitem[Chandra et~al., 2001]{3}
+Chandra, R., Dagum, L., Kohr, D., Maydan, D., McDonald, J., and Menon, R.
+  (2001).
+\newblock {\em Parallel Programming in OpenMP}.
+\newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA.
+
+\bibitem[Chen et~al., ]{2}
+Chen, J., Lu, S., and Vekhter, D.
+\newblock Common mistakes in openmp and how to avoid them.
+\newblock Report, University of Kassel.
+
+\end{thebibliography}
