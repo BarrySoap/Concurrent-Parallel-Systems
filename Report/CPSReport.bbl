@@ -11,8 +11,8 @@ Chandra, R., Dagum, L., Kohr, D., Maydan, D., McDonald, J., and Menon, R.
 \newblock {\em Parallel Programming in OpenMP}.
 \newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA.
 
-\bibitem[Chen et~al., ]{2}
-Chen, J., Lu, S., and Vekhter, D.
+\bibitem[Suss and Leopold, ]{2}
+Suss, M. and Leopold, C.
 \newblock Common mistakes in openmp and how to avoid them.
 \newblock Report, University of Kassel.
 

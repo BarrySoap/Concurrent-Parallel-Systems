@@ -158,11 +158,42 @@ The next technique to examine is the OpenMP method. This entails using the share
 \end{table}
 
 Unfortunately, when testing OpenMP, the time between difficulties was exponentially larger each step. It took roughly 414 seconds to mine 18 blocks at difficulty 4, which means that there was a mistake in implementation. Based on the parallel loops within the code, it seems that although there are 8 threads operating on the hashing function, it's only possible to have one thread work on the function at a time - in order to retain the integrity of the hashcode. We can safely assume that for each iteration, either one thread or eight threads are being initialised to share resources among the function call. This explains why it takes so long as the difficulties get larger - there is, roughly, a 1,475\% increase in the amount of iterations as the difficulty increases, which applies to the thread creation. \\
-Another method which was investigated in this project was using an OpenMP on the initialisation of the block chain. Within the application, it is possible, and most likely efficient, to handle multiple difficulties on each run of the program. In theory, it should be possible to use OpenMP to mine blocks for two difficulties at once, seeing as the loops are in parallel. However, upon putting this into application, the process requires a lot more work to guarantee the integrity of the mining process and the hashcodes. When attempting to run multiple difficulties at once, the parallel loop will attempt to mine blocks without taking the hash of the previous block - which may still be being mined. In order for this to work, there has to be a function which can emulate a mutex or a lock guard, in order to make sure that the loop doesn't try to mine blocks which are too far ahead of the process. Finally, when trying to use OpenMP to parallelise the sprintf function within the application (the main bottleneck of the program) there were shared resource issues stemming from the contents of the buffer. The OpenMP functions would have to work in a perfect order for the sprintf function to be parallelised, which proved to be increasingly difficult.
+Another method which was investigated in this project was using an OpenMP on the initialisation of the block chain. Within the application, it is possible, and most likely efficient, to handle multiple difficulties on each run of the program. In theory, it should be possible to use OpenMP to mine blocks for two difficulties at once, seeing as the loops are in parallel. However, upon putting this into application, the process requires a lot more work to guarantee the integrity of the mining process and the hashcodes. When attempting to run multiple difficulties at once, the parallel loop will attempt to mine blocks without taking the hash of the previous block - which may still be being mined. In order for this to work, there has to be a function which can emulate a mutex or a lock guard, in order to make sure that the loop doesn't try to mine blocks which are too far ahead of the process. Finally, when trying to use OpenMP to parallelise the sprintf function within the application (the main bottleneck of the program) there were shared resource issues stemming from the contents of the buffer. The OpenMP functions would have to work in a perfect order for the sprintf function to be parallelised, which proved to be increasingly difficult. \\
+When examining the multithreaded code, the following CPU usage statistics were found (on difficulty 3): \\
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l |}
+    \hline
+    Function & CPU Usage \%  \\ \hline
+    sha256 hashing & $\approx$ 57.58\% \\ \hline
+    sprintf & $\approx$ 47.69\% \\ \hline
+    block::mine\_block & $\approx$ 0.93\% \\ \hline
+    block::add\_block & ?\% \\ \hline
+    \end{tabular}
+    \caption{Multithreading CPU Usage}
+\end{table}
+
+If we compare our results here to table 3, we can see that our new code decreases the CPU usage of our mine\_block and add\_block functions dramatically. The CPU usage for the latter isn't actually shown on the results, due to how little impact it has on the CPU in comparison to the hashing function, which was difficult to parallelise internally. Both the mine\_block and add\_block functions used 90\% unit usage on the CPU in the original scripts, which shows us that the multithreading approach is definitely faster. As for OpenMP, we have some interesting results: \\
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l |}
+    \hline
+    Function & CPU Usage \%  \\ \hline
+    block::mine\_block & $\approx$ 68.54\% \\ \hline
+    block::calculate\_hash & $\approx$ 16.97\% \\ \hline
+    sha256 hashing & $\approx$ 16.06\% \\ \hline
+    block::add\_block & ?\% \\ \hline
+    \end{tabular}
+    \caption{OpenMP CPU Usage}
+\end{table}
+
+From this we can see a bottleneck occuring in the mine\_block function, due to the issues with OpenMP explained previously. This is the root of the issue in our OpenMP implementation, and shows how much it affects the program when compared to our other results and initial analysis.
 
 \section{Conclusion}
 Based on the results from the different methods of running this application, we can safely say that multithreading seems to be far more efficient executing the given tasks than the standard code or OpenMP. However, from numerous runs of the program and some background reading, it seems likely that the implementation of OpenMP functionality in this program is incorrect. The final result should run somewhat similar to the multithreaded approach, but may need a more abstracted approach to handle the blockchain and hashing algorithms. \\
-We can safely conclude that the multithreaded approach gets exponentially more efficient and faster than the standard approach at higher difficulties due to the high percentage of increased iterations through the hashing function. There is reason to believe that in theory, the OpenMP implementation should be similar, although the results show differently.
+We can safely conclude that the multithreaded approach gets exponentially more efficient and faster than the standard approach at higher difficulties due to the high percentage of increased iterations through the hashing function. There is also reason to believe that in theory, the OpenMP implementation should be similar, although the results show differently. 
 
 \newpage
 
