@@ -15,27 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="omp.cpp">
+    <ClCompile Include="Lab05.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="lab04.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Lab02.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="omp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="threadsafe_stack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="guarded.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Lab01.h">
+    <ClInclude Include="Lab05.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
