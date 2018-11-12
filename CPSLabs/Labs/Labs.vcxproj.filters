@@ -15,13 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lab05.cpp">
+    <ClCompile Include="Lab07.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Lab05.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <None Include="kernel.cl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
