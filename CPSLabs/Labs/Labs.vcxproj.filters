@@ -20,7 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="kernel.cl">
+    <None Include="vec-add.cl">
       <Filter>Source Files</Filter>
     </None>
   </ItemGroup>
