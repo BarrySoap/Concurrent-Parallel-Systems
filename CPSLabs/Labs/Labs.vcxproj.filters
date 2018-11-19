@@ -15,13 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lab07.cpp">
+    <ClCompile Include="Lab08.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="vec-add.cl">
-      <Filter>Source Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
