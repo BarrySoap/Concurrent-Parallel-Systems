@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 
 	// Run kernel with one thread for each element
 	// First value is number of blocks, second is threads per block.  Max 1024 threads per block
-	vecadd<<<ELEMENTS / 1024, 1024>>>(buffer_A, buffer_B, buffer_C);
+	vecadd << <ELEMENTS / 1024, 1024 >> > (buffer_A, buffer_B, buffer_C);
 
 	// Wait for kernel to complete
 	cudaDeviceSynchronize();
