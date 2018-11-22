@@ -19,7 +19,7 @@
 // Note: jpge.cpp/h and jpgd.cpp/h are completely standalone, i.e. they do not have any dependencies to each other.
 #include "jpge.h"
 #include "jpgd.h"
-#include "stb_image.c"
+#include "stb_image.h"
 #include <ctype.h>
 
 #if defined(_MSC_VER)
@@ -269,7 +269,7 @@ int main(int arg_c, char *ppArgs[])
     int subsampling = -1;
     bool use_jpgd = true;
 
-    int arg_index = 1;
+    int arg_index = 2;
     while ((arg_index < arg_c) && (ppArgs[arg_index][0] == '-')) {
         switch (tolower(ppArgs[arg_index][1])) {
         case 'g':

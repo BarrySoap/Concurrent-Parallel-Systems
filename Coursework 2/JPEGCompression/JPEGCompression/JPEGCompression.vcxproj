@@ -26,6 +26,7 @@
   <ItemGroup>
     <ClInclude Include="jpgd.h" />
     <ClInclude Include="jpge.h" />
+    <ClInclude Include="stb_image.h" />
     <ClInclude Include="timer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
