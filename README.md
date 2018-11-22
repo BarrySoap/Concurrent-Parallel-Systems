@@ -7,3 +7,5 @@ How to Run:
 * Install latest version of Visual Studio (15.8 as of writing).
 * Switch to Release, x86 for fastest running times.
 * If some variables are unrecognised, retarget the solution and reopen the file.
+
+Project Properties -> Debugging -> Command Arguments
