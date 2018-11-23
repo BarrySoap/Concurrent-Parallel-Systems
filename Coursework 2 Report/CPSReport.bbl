@@ -1,6 +1,17 @@
 \begin{thebibliography}{}
 
-\bibitem[Plus, ]{1}
+\bibitem[Dias, ]{3}
+Dias, D.
+\newblock Jpeg compression algorithm.
+\newblock
+  https://medium.com/@danojadias/jpeg-compression-algorithm-969af03773da.
+
+\bibitem[kornelski, ]{1}
+kornelski.
+\newblock jpeg-compressor.
+\newblock https://github.com/kornelski/jpeg-compressor.
+
+\bibitem[Plus, ]{2}
 Plus, P.
 \newblock All you need to know about jpeg compression.
 \newblock
