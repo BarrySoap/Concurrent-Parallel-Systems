@@ -24,7 +24,17 @@
 \end{abstract}
 
 \section{Introduction and Background}
+In order to understand how JPEG (Joint Photographic Experts Group) compression can be parallelised, we must first investigate the overall process and purpose of the compression. According to techradar.com,  JPEG compression, "is a lossy compression format conceived explicitly for making photo files smaller and exploits the imperfect characteristics of our perception". The process for this can be split into five main steps:
 
+\begin{itemize}
+\item Covert RGB colours of the image to YCbCr (Luminance, Chroma: Blue; Chroma: Red) colour space.
+\item Preprocess image for DCT (Discrete Cosine Transformation) conversion.
+\item DCT transformation.
+\item Coefficient Quantization
+\item Lossless Encoding
+\end{itemize}
+
+We will touch more on these concepts in the following sections, which involve evaluating the base program, suggesting a better solution for optimisation, implementing it as described, discussing the results and wrapping up the findings. First, the program must be examined and evaluated based on it's overall performance.
 
 \section{Initial Analysis}
 
