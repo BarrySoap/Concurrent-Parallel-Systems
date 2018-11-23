@@ -61,6 +61,10 @@ As such, the report will detail a methodology and results assuming these specifi
     \caption{JPEG Compression Execution Time}
 \end{table}
 
+These findings were exlusively within Visual Studio, Release mode, x86. As we can see from table 1, the program itself is very fast. The quality factor of the compression doesn't seem to have much effect on the execution time - in most cases, there was only a rise of roughly 3.5\%. This table will eventually be used as a comparison after a parallelised solution is implemented - for now, we have to identify the bottleneck(s) of the program, so that we have a foundational understanding of where the program can be parallelised. \\
+
+
+
 \section{Methodology}
 
 \section{Results and Discussion}
