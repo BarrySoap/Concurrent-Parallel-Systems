@@ -63,7 +63,32 @@ As such, the report will detail a methodology and results assuming these specifi
 
 These findings were exlusively within Visual Studio, Release mode, x86. As we can see from table 1, the program itself is very fast. The quality factor of the compression doesn't seem to have much effect on the execution time - in most cases, there was only a rise of roughly 3.5\%. This table will eventually be used as a comparison after a parallelised solution is implemented - for now, we have to identify the bottleneck(s) of the program, so that we have a foundational understanding of where the program can be parallelised. \\
 
+The main hot-path of the program in main can be seen as follows:
 
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.6\textwidth]{"hotpath"}
+		\caption{JPEG Compressor Hot-Path}
+\end{figure}
+
+While figure 1 shows the CPU usage within main, we have to look further in the code to find the bottleneck of the program. The almost-full list of function CPU usage is:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l | l |}
+    \hline
+    Function & CPU Unit Usage & CPU Usage \%  \\ \hline
+    jpge::compress\_image\_to\_jpeg\_file() & 3337 & 45.19\% \\ \hline
+    jpge::compress\_image\_to\_stream() & 3334 & 45.15\% \\ \hline
+    jpge::jpeg\_encoder::read\_image() & 1930 & 26.13\% \\ \hline
+    do\_png() & 1710 & 23.16\% \\ \hline
+    parse\_png\_file() & 1710 & 23.16\% \\ \hline
+    stbi\_load() & 1720 & 23.16\% \\ \hline
+    \end{tabular}
+    \caption{Individual Function CPU Usage}
+\end{table}
+
+When looking at the definitions and calling of these functions, it appears as though there are multiple bottlenecks within the 'compress\_image\_to\_jpeg\_file' function. The CPU usage for this function is split between reading in the image, taking subsamples of the coordinate data and compressing the image subsequently. A handful of functions from table 2 point to these lines, and it seems logical to assume that this section will be parallelised for better performance.
 
 \section{Methodology}
 
