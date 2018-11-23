@@ -44,7 +44,22 @@ For this project, the JPEG compressor created by the user 'kornelski' on GitHub 
 \item GPU: NVIDIA GeForce GTX 960M (4GB, GDDR5) \\
 \end{itemize}
 
-As such, the report will detail a methodology and results assuming these specifications. 
+As such, the report will detail a methodology and results assuming these specifications. To start with, I used the Visual Studio 2017 diagnostic tools to analyse the overall CPU usage of the program when given various parameters. The program has a range of functionality, and the most pressing of them is the exhaustive test for the compressor, amongst the general compression and decompresion. First, we will look at the general compression algorithm, which has multiple variables affecting the execution time. Among these variables is the image size and quality factor. The quality factor is simply a number ranging from 0 - 100, relative to how sharp the resulting image should be. By modifying the quality factor and image size over 10 runs, the following results were found: \\
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l | l | l | l | l |}
+    \hline
+    Image Size & Quality Factor: 40 & Quality Factor: 60 & Quality Factor: 80 & Quality Factor: 100  \\ \hline
+    100 x 100 & 0.005 seconds & 0.006 seconds & 0.010 seconds & 0.010 seconds \\ \hline
+    200 x 200 & 0.0089 seconds & 0.0213 seconds & 0.0129 seconds & 0.0177 seconds \\ \hline
+    400 x 400 & 0.0337 seconds & 0.0339 seconds & 0.0369 seconds & 0.0445 seconds \\ \hline
+    800 x 800 & 0.1309 seconds & 0.1343 seconds & 0.1492 seconds & 0.1797 seconds \\ \hline
+    1600 x 1600 & 0.3461 seconds & 0.3586 seconds & 0.381 seconds & 0.4653 seconds \\ \hline
+    3000 x 3000 & 1.0833 seconds & 1.0854 seconds & 1.1238 seconds & 1.2284 seconds \\ \hline
+    \end{tabular}
+    \caption{JPEG Compression Execution Time}
+\end{table}
 
 \section{Methodology}
 

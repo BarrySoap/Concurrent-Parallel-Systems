@@ -21,6 +21,8 @@
 #include "jpgd.h"
 #include "stb_image.h"
 #include <ctype.h>
+#include <ctime>
+#include <iostream>
 
 #if defined(_MSC_VER)
 #define strcasecmp _stricmp
@@ -262,6 +264,7 @@ failure:
 int main(int arg_c, char *ppArgs[])
 {
     printf("jpge/jpgd example app\n");
+	clock_t begin = clock();
 
     // Parse command line.
     bool run_exhausive_test = false;
@@ -424,6 +427,10 @@ int main(int arg_c, char *ppArgs[])
         return EXIT_FAILURE;
     }
     log_printf("Success.\n");
+	clock_t end = clock();
+	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
+
+	std::cout << elapsed_secs << std::endl;
 
     return EXIT_SUCCESS;
 }
