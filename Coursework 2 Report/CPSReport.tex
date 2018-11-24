@@ -7,6 +7,7 @@
 \usepackage{float}
 \usepackage[english]{babel}
 \usepackage[top=1.0in, bottom=1.0in, left=1.0in, right=1.0in]{geometry}
+\usepackage[bottom]{footmisc}
 \graphicspath{{Images/}}
 \linespread{1.25}
 
@@ -68,7 +69,7 @@ As such, the report will detail a methodology and results assuming these specifi
     \caption{JPEG Compression Execution Time}
 \end{table}
 
-These findings were exclusively within Visual Studio, Release mode, x86. As we can see from table 1, the program itself is very fast. The quality factor of the compression doesn't seem to have much effect on the execution time - in most cases, there was only a rise of roughly 3.5\%. When modifying the image size, the rise in execution time can range from between 160\% to 288\% $\mypm$ 10\% - in order to effectively test the execution time, the image size is the important variable to focus on. When using methods or parallelisation such as multi-threading, OpenMP or GPU architectures, it seems likely that at lower image sizes, the initialisation of threads, parallelised loops or quantisation will have more strain on the CPU than the image compression itself. With that in mind, images with a pixel amount larger than 9,000,000 will be far more useful in testing the compression, and will be used as test cases in the following sections. Table 1 will eventually be used as a comparison after a parallelised solution is implemented - for now, the bottleneck(s) of the program must be identified, such that we have a foundational understanding of where the program can be parallelised. \\
+These findings were exclusively within Visual Studio, Release mode, x86. As we can see from table 1, the program itself is very fast. The quality factor of the compression doesn't seem to have much effect on the execution time - in most cases, there was only a rise of roughly 3.5\%. When modifying the image size, the rise in execution time can range from between 160\% to 288\% $\mypm$ 10\% - in order to effectively test the execution time, the image size is the important variable to focus on. When using methods or parallelisation such as multi-threading, OpenMP (Open Multi-Processing) or GPU architectures, it seems likely that at lower image sizes, the initialisation of threads, parallelised loops or quantisation will have more strain on the CPU than the image compression itself. With that in mind, images with a pixel amount larger than 9,000,000 will be far more useful in testing the compression, and will be used as test cases in the following sections. Table 1 will eventually be used as a comparison after a parallelised solution is implemented - for now, the bottleneck(s) of the program must be identified, such that we have a foundational understanding of where the program can be parallelised. \\
 
 The main hot-path of the program in main can be seen as follows:
 
@@ -78,7 +79,7 @@ The main hot-path of the program in main can be seen as follows:
 		\caption{JPEG Compressor Hot-Path}
 \end{figure}
 
-From this, we can extract that the image loading and image comparison functions are costly; these load function simply load the image from a path with predetermined dimension values and parses it accordingly. The image comparison function computes the image error statistics, used to measure the accuracy of the observed image to the expected image. However, the general compression algorithms are pressing the CPU more than these functions; While figure 1 shows the CPU usage within main, we have to look further in the code to find the bottleneck of the program. The almost-full list of function CPU usage is: \\
+From this, we can extract that the image loading and image comparison functions are costly; these load function simply load the image from a path with predetermined dimension values and parses it accordingly. The image comparison function computes the image error statistics, used to measure the accuracy of the observed image to the expected image. These functions cannot be parallelised, as the operations are inherently sequential. However, the general compression algorithms are pressing the CPU more than these functions; While figure 1 shows the CPU usage within main, we have to look further in the code to find the bottleneck of the program. The almost-full list of function CPU usage is: \\
 
 \begin{table}[H]
     \centering
@@ -95,7 +96,15 @@ From this, we can extract that the image loading and image comparison functions 
     \caption{Individual Function CPU Usage}
 \end{table}
 
-When looking at the definitions and calling of these functions, it appears as though there are multiple bottlenecks within the 'compress\_image\_to\_jpeg\_file' function. The CPU usage for this function is split between reading in the image, taking subsamples of the coordinate data and compressing the image subsequently. A handful of functions from table 2 point to these lines, and it seems logical to assume that this section will be parallelised for better performance.
+When looking at the definitions and calling of these functions, it appears as though there are multiple bottlenecks within the 'compress\_image\_to\_jpeg\_file' function. The CPU usage for this function is split between reading in the image, taking subsamples of the coordinate data and compressing the image subsequently. A handful of functions from table 2 point to these lines, and it seems logical to assume that this section will be parallelised for better performance using our previously mentioned techniques. When analysing the function itself, the line-by-line breakdown shows some potential areas of parallelisation: \\
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.99\textwidth]{"potentialareas"}
+		\caption{Potential Spots of Parallelisation}
+\end{figure}
+
+As seen in figure 2, the 'quantize\_pixels' function is compressing a range of values related to the image into a single quantum value, such that with less discrete variables, the image should be easier to compress. These discrete values include: sample 'sub-images' which come from the main image, the discrete cosine transform and quantisation of the image dimensions, as well as the values returned from the Huffman\footnote{Huffman coding is a lossless data compression algorithm.} encoding function. When optimising this application, threaded approaches are generally useful for breaking down and parallelising looped processes, as are parellelised loops supported by OpenMP. As long as the discrete/quantum variables can be shared, the application should benefit greatly from these techniques in the overall speed of execution. \\
 
 \section{Methodology}
 
