@@ -16,6 +16,13 @@
 
 \date{\today}
 
+\makeatletter
+\newcommand{\mypm}{\mathbin{\mathpalette\@mypm\relax}}
+\newcommand{\@mypm}[2]{\ooalign{%
+  \raisebox{.1\height}{$#1+$}\cr
+  \smash{\raisebox{-.6\height}{$#1-$}}\cr}}
+\makeatother
+
 \begin{document}
 \maketitle
 
@@ -44,7 +51,7 @@ For this project, the JPEG compressor created by the user 'kornelski' on GitHub 
 \item GPU: NVIDIA GeForce GTX 960M (4GB, GDDR5) \\
 \end{itemize}
 
-As such, the report will detail a methodology and results assuming these specifications. To start with, I used the Visual Studio 2017 diagnostic tools to analyse the overall CPU usage of the program when given various parameters. The program has a range of functionality, and the most pressing of them is the exhaustive test for the compressor, amongst the general compression and decompresion. First, we will look at the general compression algorithm, which has multiple variables affecting the execution time. Among these variables is the image size and quality factor. The quality factor is simply a number ranging from 0 - 100, relative to how sharp the resulting image should be. By modifying the quality factor and image size over 10 runs, the following results were found: \\
+As such, the report will detail a methodology and results assuming these specifications. To start with, I used the Visual Studio 2017 diagnostic tools to analyse the overall CPU usage of the program when given various parameters. The program has a range of functionality, and the most pressing of them is the exhaustive test for the compressor, amongst the general compression and decompresion. For this report, we will look exclusively we at the general compression algorithm, which has multiple variables affecting the execution time. Among these variables is the image size and quality factor. The quality factor is simply a number ranging from 0 - 100, relative to how sharp the resulting image should be. By modifying the quality factor and image size over 100 runs, the following execution times were found: \\
 
 \begin{table}[H]
     \centering
@@ -61,7 +68,7 @@ As such, the report will detail a methodology and results assuming these specifi
     \caption{JPEG Compression Execution Time}
 \end{table}
 
-These findings were exlusively within Visual Studio, Release mode, x86. As we can see from table 1, the program itself is very fast. The quality factor of the compression doesn't seem to have much effect on the execution time - in most cases, there was only a rise of roughly 3.5\%. This table will eventually be used as a comparison after a parallelised solution is implemented - for now, we have to identify the bottleneck(s) of the program, so that we have a foundational understanding of where the program can be parallelised. \\
+These findings were exclusively within Visual Studio, Release mode, x86. As we can see from table 1, the program itself is very fast. The quality factor of the compression doesn't seem to have much effect on the execution time - in most cases, there was only a rise of roughly 3.5\%. When modifying the image size, the rise in execution time can range from between 160\% to 288\% $\mypm$ 10\% - in order to effectively test the execution time, the image size is the important variable to focus on. When using methods or parallelisation such as multi-threading, OpenMP or GPU architectures, it seems likely that at lower image sizes, the initialisation of threads, parallelised loops or quantisation will have more strain on the CPU than the image compression itself. With that in mind, images with a pixel amount larger than 9,000,000 will be far more useful in testing the compression, and will be used as test cases in the following sections. Table 1 will eventually be used as a comparison after a parallelised solution is implemented - for now, the bottleneck(s) of the program must be identified, such that we have a foundational understanding of where the program can be parallelised. \\
 
 The main hot-path of the program in main can be seen as follows:
 
@@ -71,7 +78,7 @@ The main hot-path of the program in main can be seen as follows:
 		\caption{JPEG Compressor Hot-Path}
 \end{figure}
 
-While figure 1 shows the CPU usage within main, we have to look further in the code to find the bottleneck of the program. The almost-full list of function CPU usage is:
+From this, we can extract that the image loading and image comparison functions are costly; these load function simply load the image from a path with predetermined dimension values and parses it accordingly. The image comparison function computes the image error statistics, used to measure the accuracy of the observed image to the expected image. However, the general compression algorithms are pressing the CPU more than these functions; While figure 1 shows the CPU usage within main, we have to look further in the code to find the bottleneck of the program. The almost-full list of function CPU usage is: \\
 
 \begin{table}[H]
     \centering
