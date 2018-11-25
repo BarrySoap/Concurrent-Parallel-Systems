@@ -8,4 +8,6 @@ How to Run:
 * Switch to Release, x86 for fastest running times.
 * If some variables are unrecognised, retarget the solution and reopen the file.
 
-Project Properties -> Debugging -> Command Arguments
+Coursework 2:
+
+* Project Properties -> Debugging -> Command Arguments
