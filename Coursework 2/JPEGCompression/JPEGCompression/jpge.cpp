@@ -22,6 +22,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <omp.h>
 
 #define JPGE_MAX(a,b) (((a)>(b))?(a):(b))
 #define JPGE_MIN(a,b) (((a)<(b))?(a):(b))
@@ -824,13 +825,14 @@ bool jpeg_encoder::emit_end_markers()
 bool jpeg_encoder::compress_image()
 {
     for(int c=0; c < m_num_components; c++) {
-        for (int y = 0; y < m_image[c].m_y; y+= 8) {
-            for (int x = 0; x < m_image[c].m_x; x += 8) {
-                dct_t sample[64];
-                m_image[c].load_block(sample, x, y);
-                quantize_pixels(sample, m_image[c].get_dctq(x, y), m_huff[c > 0].m_quantization_table);
-            }
-        }
+#pragma omp parallel for
+			for (int y = 0; y < m_image[c].m_y; y += 8) {
+				for (int x = 0; x < m_image[c].m_x; x += 8) {
+					dct_t sample[64];
+					m_image[c].load_block(sample, x, y);
+					quantize_pixels(sample, m_image[c].get_dctq(x, y), m_huff[c > 0].m_quantization_table);
+				}
+			}
     }
 
     for (int y = 0; y < m_y; y+= m_mcu_h) {
@@ -927,14 +929,16 @@ bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, in
         return false;
     }
 
-    for (int y = 0; y < height; y++) {
-        if (m_num_components == 1) {
-            load_mcu_Y(image_data + width * y * bpp, width, bpp, y);
-        } else {
-            load_mcu_YCC(image_data + width * y * bpp, width, bpp, y);
-        }
-    }
-
+#pragma omp parallel for schedule(static)
+		for (int y = 0; y < height; y++) {
+			if (m_num_components == 1) {
+				load_mcu_Y(image_data + width * y * bpp, width, bpp, y);
+			}
+			else {
+				load_mcu_YCC(image_data + width * y * bpp, width, bpp, y);
+			}
+		}
+    
     for(int c=0; c < m_num_components; c++) {
         for (int y = height; y < m_image[c].m_y; y++) {
             for(int x=0; x < m_image[c].m_x; x++) {
