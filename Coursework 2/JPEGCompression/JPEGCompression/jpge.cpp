@@ -824,9 +824,12 @@ bool jpeg_encoder::emit_end_markers()
 
 bool jpeg_encoder::compress_image()
 {
+	omp_set_nested(1);
+	omp_set_num_threads(8);
+
     for(int c=0; c < m_num_components; c++) {
-#pragma omp parallel for
 			for (int y = 0; y < m_image[c].m_y; y += 8) {
+#pragma omp parallel for
 				for (int x = 0; x < m_image[c].m_x; x += 8) {
 					dct_t sample[64];
 					m_image[c].load_block(sample, x, y);
@@ -929,7 +932,7 @@ bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, in
         return false;
     }
 
-#pragma omp parallel for schedule(static)
+#pragma omp parallel for
 		for (int y = 0; y < height; y++) {
 			if (m_num_components == 1) {
 				load_mcu_Y(image_data + width * y * bpp, width, bpp, y);
@@ -939,6 +942,7 @@ bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, in
 			}
 		}
     
+#pragma omp parallel for
     for(int c=0; c < m_num_components; c++) {
         for (int y = height; y < m_image[c].m_y; y++) {
             for(int x=0; x < m_image[c].m_x; x++) {
