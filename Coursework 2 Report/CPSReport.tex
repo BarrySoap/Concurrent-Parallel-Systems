@@ -54,13 +54,13 @@ To preprocess for discrete cosine transformation, the image is first split up in
 
 After obtaining these values, the discrete cosine transform (DCT) helps separate the image into parts (or spectral sub-bands) of differing importance (with respect to the image's visual quality). After the image is split into equal blocks, the two-dimensional DCT is computed for each block. The DCT coefficients are then quantized, coded, and transmitted. The JPEG receiver (or JPEG file reader) decodes the quantized DCT coefficients, computes the inverse two-dimensional DCT of each block, and then puts the blocks back together into a single image. For typical images, many of the DCT coefficients have values close to zero. These coefficients can be discarded without seriously affecting the quality of the reconstructed image \textit{(MathWorks, pp. 7, 2018)}. \\
 From here, any values left in the pixel matrix close to 0 are converted to 0, then divided by a matrix from the standard JPEG quantisation table (for luminance). \\
-The final step is lossless encoding, using Huffman coding (which the analysed application utilises). This is to preserve the quality of the image while reducing the file size - by using a specific method for choosing the representation for each symbol, this results in a prefix-free code that expresses the most common characters using shorter strings of bits than are used for less common source symbols. No other mapping of individual source symbols to unique strings of bits will produce a smaller average output size when the actual symbol frequencies agree with those used to create the code.
+The final step is lossless encoding, using Huffman coding (which the analysed application utilises). This is to preserve the quality of the image while reducing the file size - by using a specific method for choosing the representation for each symbol, this results in a prefix-free code that expresses the most common characters using shorter strings of bits than are used for less common source symbols in the image chunks/parts/spectral sub-bands. No other mapping of individual source symbols to unique strings of bits will produce a smaller average output size when the actual symbol frequencies agree with those used to create the code.
 
 We will reference these concepts in the following sections - which involve evaluating the base program, suggesting a better solution for optimisation, implementing it as described, discussing the results and wrapping up the findings. First, the program must be examined and evaluated based on its overall performance.
 
 \section{Initial Analysis}
 
-For this project, the JPEG compressor created by the user 'kornelski' on GitHub will be analysed. The link for this repository can be found as a reference. The specifications used to run this compressor and analyse it are as follows:
+For this project, the JPEG compressor created by the user 'kornelski' on GitHub will be analysed. The link for this repository can be found as a reference. The specifications used to run this compressor and analyse it are as follows: \\
 
 \begin{itemize}
 \item CPU: Intel Core i7-6700HQ @ 2.60GHz (4 cores, 8 threads)
