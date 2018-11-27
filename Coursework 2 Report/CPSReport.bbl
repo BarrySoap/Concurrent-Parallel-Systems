@@ -16,6 +16,21 @@ kornelski.
 \newblock jpeg-compressor.
 \newblock https://github.com/kornelski/jpeg-compressor.
 
+\bibitem[Marshall, ]{7}
+Marshall, D.
+\newblock The discrete cosine transform (dct).
+\newblock http://users.cs.cf.ac.uk/Dave.Marshall/Multimedia/node231.html.
+
+\bibitem[MathWorks, ]{8}
+MathWorks.
+\newblock Discrete cosine transform.
+\newblock https://uk.mathworks.com/help/images/discrete-cosine-transform.html.
+
+\bibitem[MaximumCompression, ]{9}
+MaximumCompression.
+\newblock Data compression theory and algorithms.
+\newblock https://www.maximumcompression.com/algoritms.php.
+
 \bibitem[Microsoft, ]{6}
 Microsoft.
 \newblock 3.1.8.1.3 color conversion (rgb to ycbcr).
