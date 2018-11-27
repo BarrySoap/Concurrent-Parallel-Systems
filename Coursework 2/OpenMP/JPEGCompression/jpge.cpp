@@ -952,6 +952,7 @@ bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, in
     }
 
     if (m_comp[0].m_h_samp == 2) {
+#pragma omp parallel for
         for(int c=1; c < m_num_components; c++) {
             m_image[c].subsample(m_image[0], m_comp[0].m_v_samp);
         }
