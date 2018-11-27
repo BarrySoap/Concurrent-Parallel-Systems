@@ -42,7 +42,7 @@ In order to understand how JPEG (Joint Photographic Experts Group) compression c
 \item Lossless Encoding \\
 \end{itemize}
 
-Before analysis is commenced, we must establish an understanding of how JPEG compression works. In reference to the process list, we will analyse each step of the compression process. \\
+Before analysis is commenced, we must establish an understanding of how these concepts work. In reference to the process list, we will analyse each step of the compression process. \\
 In order to convert RGB colours to a YCbCr colour space, each component transform of the image provides an input value between 0 - 255 and converts it into Y, Cb, Cr values in the range 0 - 255, -128 - 127, and -128 - 127 respectively. The Y (luminance) component is then level-shifted down to the range -128 - 127, and the input tile of the level-shifted symmetric YCbCr colour space is used as the input for the next step of the compression process. \\
 To preprocess for discrete cosine transformation, the image is first split up into equally sized blocks. The pixel matrix for each block is then centralised around 0, and 127 is subtracted from each value. This process looks as follows: \\
 
