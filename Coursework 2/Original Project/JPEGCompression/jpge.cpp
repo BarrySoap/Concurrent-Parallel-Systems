@@ -22,7 +22,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
-#include <omp.h>
 
 #define JPGE_MAX(a,b) (((a)>(b))?(a):(b))
 #define JPGE_MIN(a,b) (((a)<(b))?(a):(b))
@@ -824,9 +823,6 @@ bool jpeg_encoder::emit_end_markers()
 
 bool jpeg_encoder::compress_image()
 {
-	omp_set_nested(1);
-	omp_set_num_threads(8);
-
     for(int c=0; c < m_num_components; c++) {
 			for (int y = 0; y < m_image[c].m_y; y += 8) {
 				for (int x = 0; x < m_image[c].m_x; x += 8) {
