@@ -22,6 +22,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <math.h>
+#include <thread>
+#include <vector>
 
 #define JPGE_MAX(a,b) (((a)>(b))?(a):(b))
 #define JPGE_MIN(a,b) (((a)<(b))?(a):(b))
@@ -923,18 +925,28 @@ void jpeg_encoder::deinit()
 
 bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, int bpp)
 {
+	// Get the available threads relative to the processor.
+	auto num_threads = std::thread::hardware_concurrency();
+	std::vector<std::thread> threads;
+
     if (bpp != 1 && bpp != 3 && bpp != 4) {
         return false;
     }
 
+	// For the amount of threads we have available,
+	for (unsigned int i = 0; i < num_threads; ++i)
+	{
 		for (int y = 0; y < height; y++) {
 			if (m_num_components == 1) {
-				load_mcu_Y(image_data + width * y * bpp, width, bpp, y);
+				threads.push_back(std::thread(&jpeg_encoder::load_mcu_Y, this, (image_data + width * y * bpp), width, bpp, y));
+				//load_mcu_Y(image_data + width * y * bpp, width, bpp, y);
 			}
 			else {
-				load_mcu_YCC(image_data + width * y * bpp, width, bpp, y);
+				threads.push_back(std::thread(&jpeg_encoder::load_mcu_YCC, this, (image_data + width * y * bpp), width, bpp, y));
+				//load_mcu_YCC(image_data + width * y * bpp, width, bpp, y);
 			}
 		}
+	}
     
     for(int c=0; c < m_num_components; c++) {
         for (int y = height; y < m_image[c].m_y; y++) {
@@ -967,6 +979,12 @@ bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, in
             }
         }
     }
+
+	// Join the threads available in our list of threads.
+	for (auto &t : threads)
+	{
+		t.join();
+	}
 
     return true;
 }
