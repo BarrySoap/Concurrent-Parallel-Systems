@@ -158,7 +158,21 @@ Firstly, for each technique used, the execution time was serialised into a CSV f
 
 As seen from the above table, the usefulness of OpenMP and it's reliability will only grow exponentially relative to the image size - i.e. as the image gets bigger, OpenMP parallelisation will make the compression process faster. However, at smaller image sizes, the initialisation of parallel loops is more costly than compressing the image sequentially. In the application, we can safely assume that the threshold of parallelised speedup lies at an image size of roughly 2000x2000 pixels. The inclusion of scheduling, whether it be static or dynamic, is completely superfluous - the mapping of threads to relative tasks in the loop cannot speedup the program due to the size of the task. Similarly, resources do not have to be shared amongst the costly functions. In some instances of the program, the variables have to/must be shared amongst loops, such that the output stays correct. However, on examination, this wasn't necessary for any speedup within the program. As a comparison, the multithreading example will be detailed.
 
+As a reminder, in the multithreading example, a CPU with 8 threads will be used as the context of analysis. The implementation of multithreading within the application was very similar to the OpenMP method - for the amount of threads relative to the processor, run a given task among those threads. However, this technique had a significantly slower runtime, as seen in the following results:
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l | l | l | l |}
+    \hline
+    Image Size (Pixels) & Sequential Time & Parallel Time & Speedup & Efficiency \\ \hline
+    100 x 100 & x seconds & y seconds & z & a \\ \hline
+    800 x 800 & x seconds & y seconds & z & a \\ \hline
+    1600 x 1600 & x seconds & y seconds & z & a \\ \hline
+    3000 x 3000 & x seconds & y seconds & z & a \\ \hline
+    8000 x 8000 & x seconds & y seconds & z & a \\ \hline
+    \end{tabular}
+    \caption{Multithreading Speedup and Efficiency Results}
+\end{table}
 
 \section{Conclusion}
 
