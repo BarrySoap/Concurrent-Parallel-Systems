@@ -927,14 +927,14 @@ bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, in
         return false;
     }
 
-		for (int y = 0; y < height; y++) {
-			if (m_num_components == 1) {
-				load_mcu_Y(image_data + width * y * bpp, width, bpp, y);
-			}
-			else {
-				load_mcu_YCC(image_data + width * y * bpp, width, bpp, y);
-			}
+	for (int y = 0; y < height; y++) {
+		if (m_num_components == 1) {
+			load_mcu_Y(image_data + width * y * bpp, width, bpp, y);
 		}
+		else {
+			load_mcu_YCC(image_data + width * y * bpp, width, bpp, y);
+		}
+	}
     
     for(int c=0; c < m_num_components; c++) {
         for (int y = height; y < m_image[c].m_y; y++) {

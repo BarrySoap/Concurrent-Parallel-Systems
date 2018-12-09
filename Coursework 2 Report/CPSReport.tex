@@ -67,7 +67,7 @@ For this project, the JPEG compressor created by the user 'kornelski' on GitHub 
 \item GPU: NVIDIA GeForce GTX 960M (4GB, GDDR5) \\
 \end{itemize}
 
-As such, the report will detail a methodology and results assuming these specifications. To start with, I used the Visual Studio 2017 diagnostic tools to analyse the overall CPU usage of the program when given various parameters. The program has a range of functionality, and the most pressing of them is the exhaustive test for the compressor, amongst the general compression and decompresion. For this report, we will look exclusively we at the general compression algorithm, which has multiple variables affecting the execution time. Among these variables is the image size and quality factor. The quality factor is simply a number ranging from 0 - 100, relative to how sharp the resulting image should be. By modifying the quality factor and image size over 100 runs, the following execution times were found: \\
+As such, the report will detail a methodology and results assuming these specifications. To start with, I used the Visual Studio 2017 diagnostic tools to analyse the overall CPU usage of the program when given various parameters. The program has a range of functionality, and the most pressing of them is the exhaustive test for the compressor, amongst the general compression and decompresion. For this report, we will look exclusively we at the general compression algorithm, which has multiple variables affecting the execution time. Among these variables is the image size and quality factor. The quality factor is simply a number ranging from 0 - 100, relative to how sharp the resulting image should be. By modifying the quality factor and image size over 20 runs, the following execution times were found: \\
 
 \begin{table}[H]
     \centering
@@ -125,15 +125,14 @@ As seen in figure 2, the 'quantize\_pixels' function is compressing a range of v
 As seen from the initial analysis, the main bottlenecks lie in the quantisation and image reading processes. There are numerous operations in the program which cannot be parallelised, such as the image I/O functions - as such, we will examine the approaches of parallelising the applicable sections of the program in this section. A selection of parallelisation techniques can be prepared to optimise the application - these techniques can be split into two types: CPU-based, and GPU-based. In this report, we will aim to look at CPU-based approaches such as multithreading, OpenMP parallelisation and MPI, as well as utilising GPU-based approaches such as the OpenCL and CUDA architectures. \\
 The first method of optimisation should and will be general improvements around the application - for such a large program, it seems likely that it contains some superfluous code or functions which could be improved. If there are instances of slow code which can be quickly improved or removed, it will be changed. After this is done, the parallelisation techniques should be implemented and executed in order of difficulty. Starting off with the easiest - OpenMP will be used as a proof of concept that particular facets of the program can be parallelised and optimised. If applicable, the multiple occurences of OpenMP parallelisation should utilise the available integrated functions to make the process more robust. However, proving the compression process is optimised will be difficult - parallelisation can be proved by methods such as OpenMP's built-in functions or printing the thread numbers. However, while the application may be faster, the only way to test the compression is comparing the file sizes. In this report, the findings will reference the execution time of the application and the difference in file size. \\
 Following this, a multithreaded approach will be implemented and tested, as well as a possible MPI solution. Theoretically, in the 'compress\_image' and 'read\_image' functions where a bottleneck exists, the task could be distributed between a number of threads relative to the CPU; As long as the resources are shared during the quantisation process, then the application is almost guaranteed to be faster. Similarly, if MPI is used, the in-built functions can distribute the parallelism among the tasks to improve performance. \\
-In order to measure the speedup and efficiency, the execution time of each run must be serialised. For unbiased and high-coverage results, the program execution times in the results section will be an average of 100 runs of the application. The speedup and efficiency values will be presented in a table as such: \\
+In order to measure the speedup and efficiency, the execution time of each run must be serialised. For unbiased and high-coverage results, the program execution times in the results section will be an average of 20 runs of the application. The speedup and efficiency values will be presented in a table as such (assuming a quality factor of 100, given its relatively low effect on performance): \\
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{| l | l | l | l |}
+    \begin{tabular}{| l | l | l | l | l |}
     \hline
-    Function & Image Size & Quality Factor & Execution Time \\ \hline
-    compress\_image & x pixels, y pixels & x quality & x seconds $\rightarrow$ y seconds \\ \hline
-    read\_image  & x pixels, y pixels & x quality & x seconds $\rightarrow$ y seconds \\ \hline
+    Image Size (Pixels) & Sequential Time & Parallel Time & Speedup & Efficiency\\ \hline
+    x pixels, y pixels & w seconds & x seconds & y seconds & z seconds \\ \hline
     \end{tabular}
     \caption{Speedup and Efficiency Results}
 \end{table}
@@ -141,6 +140,21 @@ In order to measure the speedup and efficiency, the execution time of each run m
 Where x seconds is the time before implementation, and y seconds is the time after implementation. These tables may have more or less rows depending on the amount of parallelisation for that technique - the time before implementation will be taken from table 1. To visualise these results, R will be used to plot the average or overall time for each technique, for ease of analysis.
 
 \section{Results and Discussion}
+Firstly, for each technique used, the execution time was serialised into a CSV file, and the average time of 20 runs is taken as the estimate time of execution. As discussed before, a selection of techniques were used to parallelise this program - multithreading, OpenMP, OpenCL and CUDA. Starting with the easiest implementation, OpenMP, this involved introducing parallel loops into the application. The bottlenecked areas lie around the read\_image and compress\_image functions. With this in mind, multiple parallelised loops were placed in these functions where iteration occurred - the following execution times and speedup was found:
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{| l | l | l | l | l |}
+    \hline
+    Image Size (Pixels) & Sequential Time & Parallel Time & Speedup & Efficiency \\ \hline
+    100 x 100 & 0.0039 seconds & 0.0501 seconds & 0.0778 & 1.0006 \\ \hline
+    800 x 800 & 0.10755 seconds & 0.1815 seconds & 0.5926 & 0.99994 \\ \hline
+    1600 x 1600 & 0.28455 seconds & 0.34975 seconds & 0.8136 & 0.99997 \\ \hline
+    3000 x 3000 & 0.7453 seconds & 0.67925 seconds & 1.0972 & 1.00004 \\ \hline
+    8000 x 8000 & 3.972 seconds & 3.1194 seconds & 1.2733 & 1.00002 \\ \hline
+    \end{tabular}
+    \caption{OpenMP Speedup and Efficiency Results}
+\end{table}
 
 \section{Conclusion}
 

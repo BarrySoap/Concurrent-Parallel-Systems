@@ -838,7 +838,7 @@ bool jpeg_encoder::compress_image()
 			}
     }
 
-#pragma omp parallel for
+//#pragma omp parallel for					CANNOT BE PARALLELISED
     for (int y = 0; y < m_y; y+= m_mcu_h) {
         code_mcu_row(y, false);
     }
