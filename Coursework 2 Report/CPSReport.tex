@@ -156,6 +156,10 @@ Firstly, for each technique used, the execution time was serialised into a CSV f
     \caption{OpenMP Speedup and Efficiency Results}
 \end{table}
 
+As seen from the above table, the usefulness of OpenMP and it's reliability will only grow exponentially relative to the image size - i.e. as the image gets bigger, OpenMP parallelisation will make the compression process faster. However, at smaller image sizes, the initialisation of parallel loops is more costly than compressing the image sequentially. In the application, we can safely assume that the threshold of parallelised speedup lies at an image size of roughly 2000x2000 pixels. The inclusion of scheduling, whether it be static or dynamic, is completely superfluous - the mapping of threads to relative tasks in the loop cannot speedup the program due to the size of the task. Similarly, resources do not have to be shared amongst the costly functions. In some instances of the program, the variables have to/must be shared amongst loops, such that the output stays correct. However, on examination, this wasn't necessary for any speedup within the program. As a comparison, the multithreading example will be detailed.
+
+
+
 \section{Conclusion}
 
 \newpage
