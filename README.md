@@ -11,3 +11,4 @@ How to Run:
 Coursework 2:
 
 * Project Properties -> Debugging -> Command Arguments
+* "jpge examples/8000x8000.png examples/8000x8000.jpg 100"
