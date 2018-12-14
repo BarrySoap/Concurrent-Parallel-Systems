@@ -5,7 +5,7 @@
 
 using namespace std;
 
-constexpr size_t ELEMENTS = 2048;
+//constexpr size_t ELEMENTS = 2048;
 
 __global__ void vecadd(const int *A, const int *B, int *C)
 {
@@ -23,7 +23,7 @@ __global__ void vecadd(const int *A, const int *B, int *C)
 
 int main(int argc, char **argv)
 {
-	/* Example 1: GPU Specifications /
+	/* Example 1: GPU Specifications */
 	// Get number of devices on system
 	int deviceCount;
 	cudaGetDeviceCount(&deviceCount);
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	return 0;
 	/********************************/
 
-	/* Example 2: Vector Addition */
+	/* Example 2: Vector Addition /
 	// Create host memory
 	auto data_size = sizeof(int) * ELEMENTS;
 	vector<int> A(ELEMENTS);    // Input aray
