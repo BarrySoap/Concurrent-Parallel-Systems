@@ -24,6 +24,9 @@
     <ClCompile Include="encoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Lab07.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jpgd.h">
@@ -38,5 +41,13 @@
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="vec-add.cl">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="kernel.cl">
+      <Filter>Source Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
