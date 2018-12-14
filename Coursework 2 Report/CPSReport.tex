@@ -179,10 +179,10 @@ The main issue around the threaded approach is the launching/initialisation of t
 \begin{figure}[H]
 	\centering
 		\includegraphics[width=0.99\textwidth]{"ThreadLaunch"}
-		\caption{Potential Spots of Parallelisation}
+		\caption{Thread Launching Bottleneck}
 \end{figure}
 
-The launching of a thread, even when compressing an image as small as 1600x1600, quickly becomes the most costly function in the application - using 31\% of the CPU resources. Assuming the functions utilising multithreading are being iterated a large amount of times, it makes sense why the launching of so many threads would bottleneck the program. Even when using a mutex within the forementioned blocks of code, the application is still incredibly slow.
+The launching of a thread, even when compressing an image as small as 1600x1600, quickly becomes the most costly function in the application - using 31\% of the CPU resources. Assuming the functions utilising multithreading are being iterated a large amount of times, it makes sense why the launching of so many threads would bottleneck the program. Even when using a mutex within the forementioned blocks of code, the application is still incredibly slow. Based on these results we can conclusively say that the launching of threads in this context is far more costly than initialising parallel loops within OpenMP. 
 
 \section{Conclusion}
 
