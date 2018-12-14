@@ -1,48 +1,48 @@
-\begin{thebibliography}{}
+\begin{thebibliography}{1}
 
-\bibitem[Barnwal, ]{4}
-Barnwal, A.
+\bibitem{4}
+A.~Barnwal.
 \newblock Huffman coding | greedy algo-3.
 \newblock https://www.geeksforgeeks.org/huffman-coding-greedy-algo-3/.
 
-\bibitem[Dias, ]{3}
-Dias, D.
+\bibitem{3}
+D.~Dias.
 \newblock Jpeg compression algorithm.
 \newblock
   https://medium.com/@danojadias/jpeg-compression-algorithm-969af03773da.
 
-\bibitem[kornelski, ]{1}
+\bibitem{1}
 kornelski.
 \newblock jpeg-compressor.
 \newblock https://github.com/kornelski/jpeg-compressor.
 
-\bibitem[Marshall, ]{7}
-Marshall, D.
+\bibitem{7}
+D.~Marshall.
 \newblock The discrete cosine transform (dct).
 \newblock http://users.cs.cf.ac.uk/Dave.Marshall/Multimedia/node231.html.
 
-\bibitem[MathWorks, ]{8}
+\bibitem{8}
 MathWorks.
 \newblock Discrete cosine transform.
 \newblock https://uk.mathworks.com/help/images/discrete-cosine-transform.html.
 
-\bibitem[MaximumCompression, ]{9}
+\bibitem{9}
 MaximumCompression.
 \newblock Data compression theory and algorithms.
 \newblock https://www.maximumcompression.com/algoritms.php.
 
-\bibitem[Microsoft, ]{6}
+\bibitem{6}
 Microsoft.
 \newblock 3.1.8.1.3 color conversion (rgb to ycbcr).
 \newblock https://msdn.microsoft.com/en-us/library/ff635643.aspx.
 
-\bibitem[Plus, ]{2}
-Plus, P.
+\bibitem{2}
+P.~Plus.
 \newblock All you need to know about jpeg compression.
 \newblock
   https://www.techradar.com/news/computing/all-you-need-to-know-about-jpeg-compression-586268/2.
 
-\bibitem[TechTerms, ]{5}
+\bibitem{5}
 TechTerms.
 \newblock Lossless definition.
 \newblock https://techterms.com/definition/lossless.
