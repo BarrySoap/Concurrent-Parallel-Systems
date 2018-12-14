@@ -22,7 +22,6 @@
     <ClCompile Include="encoder.cpp" />
     <ClCompile Include="jpgd.cpp" />
     <ClCompile Include="jpge.cpp" />
-    <ClCompile Include="Lab07.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="jpgd.h" />
@@ -32,7 +31,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="kernel.cl" />
-    <None Include="vec-add.cl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -140,7 +140,11 @@ In order to measure the speedup and efficiency, the execution time of each run m
 Where x seconds is the time before implementation, and y seconds is the time after implementation. These tables may have more or less rows depending on the amount of parallelisation for that technique - the time before implementation will be taken from table 1. To visualise these results, R will be used to plot the average or overall time for each technique, for ease of analysis.
 
 \section{Results and Discussion}
-Firstly, for each technique used, the execution time was serialised into a CSV file, and the average time of 20 runs is taken as the estimate time of execution. As discussed before, a selection of techniques were used to parallelise this program - multithreading, OpenMP, OpenCL and CUDA. Starting with the easiest implementation, OpenMP, this involved introducing parallel loops into the application. The bottlenecked areas lie around the read\_image and compress\_image functions. With this in mind, multiple parallelised loops were placed in these functions where iteration occurred - the following execution times and speedup was found:
+Before any results are presented - the following results were all found within Visual Studio 2017, Release Mode, x86 with the forementioned CPU/GPU specifications. Later in this section, an R script was used to plot the execution times of each technique against the respective image sizes, assuming a quality factor of 100 each time.
+Firstly, for each technique used, the execution time was serialised into a CSV file, and the average time of 20 runs is taken as the estimate time of execution. As discussed before, a selection of techniques were used to parallelise this program - multithreading, OpenMP, OpenCL and CUDA.
+
+\subsection{CPU-based Techniques}
+Starting with the easiest implementation, OpenMP, this involved introducing parallel loops into the application. The bottlenecked areas lie around the read\_image and compress\_image functions. With this in mind, multiple parallelised loops were placed in these functions where iteration occurred - the following execution times and speedup was found:
 
 \begin{table}[H]
     \centering
@@ -182,7 +186,9 @@ The main issue around the threaded approach is the launching/initialisation of t
 		\caption{Thread Launching Bottleneck}
 \end{figure}
 
-The launching of a thread, even when compressing an image as small as 1600x1600, quickly becomes the most costly function in the application - using 31\% of the CPU resources. Assuming the functions utilising multithreading are being iterated a large amount of times, it makes sense why the launching of so many threads would bottleneck the program. Even when using a mutex within the forementioned blocks of code, the application is still incredibly slow. Based on these results we can conclusively say that the launching of threads in this context is far more costly than initialising parallel loops within OpenMP. 
+The launching of a thread, even when compressing an image as small as 1600x1600, quickly becomes the most costly function in the application - using 31\% of the CPU resources. Assuming the functions utilising multithreading are being iterated a large amount of times, it makes sense why the launching of so many threads would bottleneck the program. The parallel time, just like the sequential time, seems to scale with the image size, almost exponentially. Even when using a mutex within the forementioned blocks of code, the application is still incredibly slow. Based on these results we can conclusively say that the launching of threads in this context is far more costly than initialising parallel loops within OpenMP. As there are two opposite types of results (both CPU-based), comparing them to another technique should show which of the two is the outlier. The technique to be analysed now will be CUDA, a GPU parallelisation technique.
+
+\subsection{GPU-based Techniques}
 
 \section{Conclusion}
 
