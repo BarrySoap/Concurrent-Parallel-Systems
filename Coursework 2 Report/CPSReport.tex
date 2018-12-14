@@ -189,6 +189,7 @@ The main issue around the threaded approach is the launching/initialisation of t
 The launching of a thread, even when compressing an image as small as 1600x1600, quickly becomes the most costly function in the application - using 31\% of the CPU resources. Assuming the functions utilising multithreading are being iterated a large amount of times, it makes sense why the launching of so many threads would bottleneck the program. The parallel time, just like the sequential time, seems to scale with the image size, almost exponentially. Even when using a mutex within the forementioned blocks of code, the application is still incredibly slow. Based on these results we can conclusively say that the launching of threads in this context is far more costly than initialising parallel loops within OpenMP. As there are two opposite types of results (both CPU-based), comparing them to another technique should show which of the two is the outlier. The technique to be analysed now will be CUDA, a GPU parallelisation technique.
 
 \subsection{GPU-based Techniques}
+The first GPU-based parallelisation technique to be analysed is CUDA (previously known as Compute Unified Device Architecture). 
 
 \section{Conclusion}
 
