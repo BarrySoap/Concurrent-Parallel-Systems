@@ -37,7 +37,7 @@
     <ProjectGuid>{ED0E2D16-42BB-4105-99C2-A8BA3D225E5E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>JPEGCompression</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -141,7 +141,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <OpenMPSupport>false</OpenMPSupport>
-      <AdditionalIncludeDirectories>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\include"</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.0\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
