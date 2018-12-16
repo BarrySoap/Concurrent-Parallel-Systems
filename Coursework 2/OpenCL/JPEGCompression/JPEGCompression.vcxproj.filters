@@ -40,9 +40,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="kernel.cl">
-      <Filter>Source Files</Filter>
-    </None>
     <None Include="RGBtoYCC.cl">
       <Filter>Source Files</Filter>
     </None>

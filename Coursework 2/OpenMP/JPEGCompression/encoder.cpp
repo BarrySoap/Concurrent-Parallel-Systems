@@ -266,12 +266,16 @@ failure:
 int main(int arg_c, char *ppArgs[])
 {
 	printf("jpge/jpgd example app\n");
-	clock_t begin = clock();
 
+	/*** Serialisation and Timing ***/
+	clock_t begin = clock();
 	std::ofstream times;
 	times.open("times.csv", std::ofstream::out | std::ofstream::app);
 	std::ifstream file("times.csv");
 	bool headerPrinted = false;
+	/********************************/
+
+	/*** Check for file existence and content ***/
 	if (file.is_open()) 
 	{
 		std::string line;
@@ -288,6 +292,7 @@ int main(int arg_c, char *ppArgs[])
 		}
 		file.close();
 	}
+	/*********************************************/
 
     // Parse command line.
     bool run_exhausive_test = false;
@@ -450,11 +455,14 @@ int main(int arg_c, char *ppArgs[])
         return EXIT_FAILURE;
     }
     log_printf("Success.\n");
+
+	/*** Output execution times to CSV ***/
 	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
 	std::cout << elapsed_secs << std::endl;
 	times << total_pixels << "," << quality_factor << "," << elapsed_secs << std::endl;
+	/*************************************/
 
     return EXIT_SUCCESS;
 }

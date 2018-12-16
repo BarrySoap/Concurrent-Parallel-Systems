@@ -32,7 +32,7 @@
 \end{abstract}
 
 \section{Introduction and Background}
-In order to understand how JPEG (Joint Photographic Experts Group) compression can be parallelised, we must first investigate the overall process and purpose of the compression. According to techradar.com,  JPEG compression "is a lossy compression format conceived explicitly for making photo files smaller and exploits the imperfect characteristics of our perception". The process for this can be split into five main steps: 
+In order to understand how JPEG (Joint Photographic Experts Group) compression can be parallelised, we must first investigate the overall process and purpose of the compression. According to techradar.com\cite{2},  JPEG compression "is a lossy compression format conceived explicitly for making photo files smaller and exploits the imperfect characteristics of our perception". The process for this can be split into five main steps: 
 
 \begin{itemize}
 \item Covert RGB colours of the image to YCbCr (Luminance, Chroma: Blue; Chroma: Red) colour space.
@@ -52,15 +52,15 @@ To preprocess for discrete cosine transformation, the image is first split up in
 		\caption{Discrete Cosine Transformation Preparation}
 \end{figure}
 
-After obtaining these values, the discrete cosine transform (DCT) helps separate the image into parts (or spectral sub-bands) of differing importance (with respect to the image's visual quality). After the image is split into equal blocks, the two-dimensional DCT is computed for each block. The DCT coefficients are then quantized, coded, and transmitted. The JPEG receiver (or JPEG file reader) decodes the quantized DCT coefficients, computes the inverse two-dimensional DCT of each block, and then puts the blocks back together into a single image. For typical images, many of the DCT coefficients have values close to zero. These coefficients can be discarded without seriously affecting the quality of the reconstructed image \textit{(MathWorks, pp. 7, 2018)}. \\
+After obtaining these values, the discrete cosine transform (DCT) helps separate the image into parts (or spectral sub-bands) of differing importance (with respect to the image's visual quality). After the image is split into equal blocks, the two-dimensional DCT is computed for each block. The DCT coefficients are then quantized, coded, and transmitted. The JPEG receiver (or JPEG file reader) decodes the quantized DCT coefficients, computes the inverse two-dimensional DCT of each block, and then puts the blocks back together into a single image. For typical images, many of the DCT coefficients have values close to zero. These coefficients can be discarded without seriously affecting the quality of the reconstructed image \textit{(MathWorks, pp. 7, 2018)\cite{8}}. \\
 From here, any values left in the pixel matrix close to 0 are converted to 0, then divided by a matrix from the standard JPEG quantisation table (for luminance). \\
-The final step is lossless encoding, using Huffman coding (which the analysed application utilises). This is to preserve the quality of the image while reducing the file size - by using a specific method for choosing the representation for each symbol, this results in a prefix-free code that expresses the most common characters using shorter strings of bits than are used for less common source symbols in the image chunks/parts/spectral sub-bands. No other mapping of individual source symbols to unique strings of bits will produce a smaller average output size when the actual symbol frequencies agree with those used to create the code.
+The final step is lossless encoding, using Huffman coding\cite{4} (which the analysed application utilises). This is to preserve the quality of the image while reducing the file size - by using a specific method for choosing the representation for each symbol, this results in a prefix-free code that expresses the most common characters using shorter strings of bits than are used for less common source symbols in the image chunks/parts/spectral sub-bands. No other mapping of individual source symbols to unique strings of bits will produce a smaller average output size when the actual symbol frequencies agree with those used to create the code.
 
 We will reference these concepts in the following sections - which involve evaluating the base program, suggesting a better solution for optimisation, implementing it as described, discussing the results and wrapping up the findings. First, the program must be examined and evaluated based on its overall performance.
 
 \section{Initial Analysis}
 
-For this project, the JPEG compressor created by the user 'kornelski' on GitHub will be analysed. The link for this repository can be found as a reference. The specifications used to run this compressor and analyse it are as follows: \\
+For this project, the JPEG compressor created by the user 'kornelski' on GitHub\cite{1} will be analysed. The link for this repository can be found as a reference. The specifications used to run this compressor and analyse it are as follows: \\
 
 \begin{itemize}
 \item CPU: Intel Core i7-6700HQ @ 2.60GHz (4 cores, 8 threads)
@@ -119,7 +119,7 @@ When looking at the definitions and calling of these functions, it appears as th
 		\caption{Potential Spots of Parallelisation}
 \end{figure}
 
-As seen in figure 2, the 'quantize\_pixels' function is compressing a range of values related to the image into a single quantum value, such that with less discrete variables, the image should be easier to compress. These discrete values include: sample 'sub-images' which come from the main image, the discrete cosine transform and quantisation of the image dimensions, as well as the values returned from the Huffman\footnote{Huffman coding is a lossless data compression algorithm.}\footnote{Lossless compression is a class of data compression algorithms that allows the original data to be perfectly reconstructed from the compressed data.} encoding function. When optimising this application, threaded approaches are generally useful for breaking down and parallelising looped processes, as are parellelised loops supported by OpenMP. As long as the discrete/quantum variables can be shared, the application should benefit greatly from these techniques in the overall speed of execution. \\
+As seen in figure 2, the 'quantize\_pixels' function is compressing a range of values related to the image into a single quantum value, such that with less discrete variables, the image should be easier to compress. These discrete values include: sample 'sub-images' which come from the main image, the discrete cosine transform and quantisation of the image dimensions, as well as the values returned from the Huffman\footnote{Huffman coding is a lossless\cite{5} data compression algorithm.}\footnote{Lossless compression is a class of data compression algorithms that allows the original data to be perfectly reconstructed from the compressed data.} encoding function. When optimising this application, threaded approaches are generally useful for breaking down and parallelising looped processes, as are parellelised loops supported by OpenMP. As long as the discrete/quantum variables can be shared, the application should benefit greatly from these techniques in the overall speed of execution. \\
 
 \section{Methodology}
 As seen from the initial analysis, the main bottlenecks lie in the quantisation and image reading processes. There are numerous operations in the program which cannot be parallelised, such as the image I/O functions - as such, we will examine the approaches of parallelising the applicable sections of the program in this section. A selection of parallelisation techniques can be prepared to optimise the application - these techniques can be split into two types: CPU-based, and GPU-based. In this report, we will aim to look at CPU-based approaches such as multithreading, OpenMP parallelisation and MPI, as well as utilising GPU-based approaches such as the OpenCL framework. \\
@@ -189,9 +189,20 @@ The main issue around the threaded approach is the launching/initialisation of t
 The launching of a thread, even when compressing an image as small as 1600x1600, quickly becomes the most costly function in the application - using 31\% of the CPU resources. Assuming the functions utilising multithreading are being iterated a large amount of times, it makes sense why the launching of so many threads would bottleneck the program. The parallel time, just like the sequential time, seems to scale with the image size, almost exponentially. Even when using a mutex within the forementioned blocks of code, the application is still incredibly slow. Based on these results we can conclusively say that the launching of threads in this context is far more costly than initialising parallel loops within OpenMP. As there are two opposite types of results (both CPU-based), comparing them to another technique should show which of the two is the outlier. The technique to be analysed now will be OpenCL, a GPU parallelisation framework.
 
 \subsection{GPU-based Techniques}
-The first GPU-based parallelisation technique to be analysed is OpenCL (Open Computing Language).
+The first GPU-based parallelisation technique to be analysed is OpenCL (Open Computing Language). Unfortunately, the parallelised 'solution' does not work for OpenCL. However, the issues can be addressed for further research. In order to utilise GPU parallelisation, the RGB to YCC colour space conversion was parallelised, as the mathematical operations were most suited for GPU computation. This step was discussed previously in the compression process, but unfortunately the colour space in this example doesn't convert correctly, instead outputting a monochromatic image of the same size, but still compressed. The kernels are approriately launched, and the image is loaded, but the GPU buffers can only accommodate a small image, i.e 100x100 and the execution time usually lies at around 9.6 seconds. As for the colour conversion, the issue seems to be in the indexing of the X and Y positions of the image. Or, the data is getting caught somewhere within the GPU parallelisation process. If fixed, the OpenCL solution would work fully.
+
+With these solutions, the final comparisons look as such:
+
+\begin{figure}[H]
+	\centering
+		\includegraphics[width=0.99\textwidth]{"ExecutionTimes"}
+		\caption{Final Execution Times by Method and Image Size}
+\end{figure}
+
+The entry for multithreading at an image size of 8000x8000 has been changed from 223 seconds to 40 seconds, only for the readability of the graph.
 
 \section{Conclusion}
+In conclusion, the analysed JPEG compression program is very open to parallelisation. While each method of parallelisation used for this report showed a lot of promise, a few underlying issues within the blending of parallelised compression can heavily affect the final execution time. From the initial analysis, it is a clear conclusion that the factor affecting compression the most is image size. Quality factor only affects the final execution time by roughly 3.5\%. The image reading and image compression functions are the most costly in the program, and definitely the areas which should be parallelised in future. Out of each method used, OpenMP is the easiest to implement and that with the most promise of speedup. Given the amount of iterations in the compression process, the explicit launching and management of pure threads is costly and for further research, the functionality of the JPEG compression algorithm should be changed to accommodate threads more easily.
 
 \newpage
 

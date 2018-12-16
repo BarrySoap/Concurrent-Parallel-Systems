@@ -23,6 +23,8 @@
 #include <ctype.h>
 #include <ctime>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
 #if defined(_MSC_VER)
 #define strcasecmp _stricmp
@@ -268,7 +270,32 @@ failure:
 int main(int arg_c, char *ppArgs[])
 {
 	printf("jpge/jpgd example app\n");
+	/*** Serialisation and Timing ***/
 	clock_t begin = clock();
+	std::ofstream times;
+	times.open("times.csv", std::ofstream::out | std::ofstream::app);
+	std::ifstream file("times.csv");
+	bool headerPrinted = false;
+	/********************************/
+
+	/*** Check for file existence and content ***/
+	if (file.is_open())
+	{
+		std::string line;
+		while (getline(file, line))
+		{
+			if (line.find("Pixels") != std::string::npos)
+			{
+				headerPrinted = true;
+			}
+		}
+		if (headerPrinted == false)
+		{
+			times << "Pixels" << "," << "Quality Factor" << "," << "Execution Time" << std::endl;
+		}
+		file.close();
+	}
+	/*********************************************/
 
 	// Parse command line.
 	bool run_exhausive_test = false;
@@ -438,10 +465,13 @@ int main(int arg_c, char *ppArgs[])
 	}
 	log_printf("Success.\n");*/
 
+	/*** Output execution times to CSV ***/
 	clock_t end = clock();
 	double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
 	std::cout << elapsed_secs << std::endl;
+	times << total_pixels << "," << quality_factor << "," << elapsed_secs << std::endl;
+	/*************************************/
 
 	return EXIT_SUCCESS;
 }

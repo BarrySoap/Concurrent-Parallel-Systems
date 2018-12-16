@@ -829,6 +829,7 @@ bool jpeg_encoder::compress_image()
 
     for(int c=0; c < m_num_components; c++) {
 			for (int y = 0; y < m_image[c].m_y; y += 8) {
+// Initialise OpenMP parallel for
 #pragma omp parallel for
 				for (int x = 0; x < m_image[c].m_x; x += 8) {
 					dct_t sample[64];
@@ -933,6 +934,7 @@ bool jpeg_encoder::read_image(const uint8 *image_data, int width, int height, in
         return false;
     }
 
+// Initialise OpenMP parallel for
 #pragma omp parallel for
 		for (int y = 0; y < height; y++) {
 			if (m_num_components == 1) {

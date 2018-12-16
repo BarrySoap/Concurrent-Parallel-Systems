@@ -36,7 +36,7 @@ p = ggplot() +
   scale_color_manual(labels = c("Multi Threading", "OpenMP", "Original Scripts"), values = c("red", "green", "purple")) +
   xlab('Pixels') +
   ylab('Execution Time (seconds)') +
-  scale_x_continuous(trans='log10') +
-  scale_y_continuous(trans='log10')
+  scale_x_continuous(name="Pixels", labels = comma) +
+  scale_y_continuous(name="Execution Time", labels = comma)
 
 print(p)

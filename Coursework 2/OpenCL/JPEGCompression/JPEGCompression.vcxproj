@@ -30,7 +30,6 @@
     <ClInclude Include="timer.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="kernel.cl" />
     <None Include="RGBtoYCC.cl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

@@ -63,6 +63,7 @@ namespace jpge
 
 	template<class T> static void RGB_to_YCC(image *img, const T *src, int width, int y)
 	{
+		// If uncommented, causes const issues. (Not needed)
 		/*for (int x = 0; x < width; x++) {
 			const int r = src[x].r, g = src[x].g, b = src[x].b;
 			img[0].set_px( (0.299     * r) + (0.587     * g) + (0.114     * b)-128.0, x, y);
